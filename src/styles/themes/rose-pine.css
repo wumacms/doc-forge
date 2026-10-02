@@ -1,0 +1,131 @@
+/* Rose Pine 蔷薇松木文艺主题 (Light: Dawn / Dark: Main) */
+
+/* ─── Rose Pine Dawn (Light) ─── */
+[data-style="rose-pine"] {
+  --font-sans: 'Avenir Next', 'Avenir', 'PingFang SC', system-ui, -apple-system, sans-serif;
+  --font-serif: 'Palatino Linotype', 'Palatino', 'Georgia', 'Songti SC', serif;
+  --font-mono: 'Fira Code', 'Menlo', monospace;
+
+  --color-background: oklch(0.965 0.01 75);  /* base #faf4ed */
+  --color-foreground: oklch(0.40 0.04 290);  /* text #575279 */
+  --color-card: oklch(0.93 0.015 75);        /* surface #fffaf3 */
+  --color-card-foreground: oklch(0.40 0.04 290);
+  --color-popover: oklch(0.965 0.01 75);
+  --color-popover-foreground: oklch(0.40 0.04 290);
+  --color-primary: oklch(0.68 0.12 15);      /* rose #d7827e */
+  --color-primary-foreground: oklch(1.0000 0 0);
+  --color-secondary: oklch(0.89 0.015 75);
+  --color-secondary-foreground: oklch(0.40 0.04 290);
+  --color-muted: oklch(0.91 0.015 75);
+  --color-muted-foreground: oklch(0.58 0.02 290); /* muted #9893a5 */
+  --color-accent: oklch(0.88 0.03 15);
+  --color-accent-foreground: oklch(0.55 0.14 15);
+  --color-destructive: oklch(0.58 0.16 10);  /* love #b4637a */
+  --color-destructive-foreground: oklch(1.0000 0 0);
+  --color-border: oklch(0.85 0.02 75);
+  --color-input: oklch(0.89 0.015 75);
+  --color-ring: oklch(0.68 0.12 15);
+
+  --color-sidebar: oklch(0.94 0.012 75);
+  --color-sidebar-foreground: oklch(0.40 0.04 290);
+  --color-sidebar-primary: oklch(0.68 0.12 15);
+  --color-sidebar-primary-foreground: oklch(1.0000 0 0);
+  --color-sidebar-accent: oklch(0.88 0.03 15);
+  --color-sidebar-accent-foreground: oklch(0.55 0.14 15);
+  --color-sidebar-border: oklch(0.85 0.02 75);
+  --color-sidebar-ring: oklch(0.68 0.12 15);
+
+  --color-chart-1: oklch(0.68 0.12 15);  /* rose #d7827e */
+  --color-chart-2: oklch(0.52 0.11 220); /* pine #286983 */
+  --color-chart-3: oklch(0.72 0.14 75);  /* gold #ea9d34 */
+  --color-chart-4: oklch(0.60 0.12 300); /* iris #907aa9 */
+  --color-chart-5: oklch(0.58 0.16 10);  /* love #b4637a */
+
+  /* highlight.js token */
+  --hljs-bg: oklch(0.93 0.015 75);
+  --hljs-fg: oklch(0.40 0.04 290);
+  --hljs-comment: oklch(0.60 0.02 290);
+  --hljs-keyword: oklch(0.52 0.11 220); /* pine */
+  --hljs-string: oklch(0.72 0.14 75);   /* gold */
+  --hljs-number: oklch(0.68 0.12 15);   /* rose */
+  --hljs-title: oklch(0.60 0.12 300);   /* iris */
+  --hljs-attr: oklch(0.58 0.16 10);     /* love */
+  --hljs-built_in: oklch(0.55 0.12 180);/* foam */
+
+  /* monaco token */
+  --monaco-bg: oklch(0.965 0.01 75);
+  --monaco-fg: oklch(0.40 0.04 290);
+  --monaco-line-number: oklch(0.65 0.02 290);
+  --monaco-line-number-active: oklch(0.40 0.04 290);
+  --monaco-line-highlight: oklch(0.92 0.015 75);
+  --monaco-selection: oklch(0.86 0.04 15);
+  --monaco-widget-bg: oklch(0.93 0.015 75);
+  --monaco-widget-border: oklch(0.85 0.02 75);
+  --monaco-gutter-bg: oklch(0.965 0.01 75);
+  --monaco-scroll-thumb: oklch(0.84 0.02 75);
+
+  --mermaid-theme: default;
+}
+
+/* ─── Rose Pine Dark (Main) ─── */
+[data-style="rose-pine"].dark {
+  --color-background: oklch(0.18 0.025 285); /* base #191724 */
+  --color-foreground: oklch(0.90 0.015 285); /* text #e0def4 */
+  --color-card: oklch(0.23 0.03 285);        /* surface #1f1d2e */
+  --color-card-foreground: oklch(0.90 0.015 285);
+  --color-popover: oklch(0.18 0.025 285);
+  --color-popover-foreground: oklch(0.90 0.015 285);
+  --color-primary: oklch(0.82 0.10 15);      /* rose #ebbcba */
+  --color-primary-foreground: oklch(0.18 0.025 285);
+  --color-secondary: oklch(0.28 0.03 285);
+  --color-secondary-foreground: oklch(0.90 0.015 285);
+  --color-muted: oklch(0.24 0.025 285);
+  --color-muted-foreground: oklch(0.62 0.02 285); /* muted #6e6a86 */
+  --color-accent: oklch(0.30 0.04 285);
+  --color-accent-foreground: oklch(0.86 0.08 15);
+  --color-destructive: oklch(0.68 0.18 10);  /* love #eb6f92 */
+  --color-destructive-foreground: oklch(1.0000 0 0);
+  --color-border: oklch(0.32 0.03 285);
+  --color-input: oklch(0.26 0.03 285);
+  --color-ring: oklch(0.82 0.10 15);
+
+  --color-sidebar: oklch(0.15 0.025 285);
+  --color-sidebar-foreground: oklch(0.90 0.015 285);
+  --color-sidebar-primary: oklch(0.82 0.10 15);
+  --color-sidebar-primary-foreground: oklch(0.18 0.025 285);
+  --color-sidebar-accent: oklch(0.30 0.04 285);
+  --color-sidebar-accent-foreground: oklch(0.86 0.08 15);
+  --color-sidebar-border: oklch(0.28 0.03 285);
+  --color-sidebar-ring: oklch(0.82 0.10 15);
+
+  --color-chart-1: oklch(0.82 0.10 15);  /* rose #ebbcba */
+  --color-chart-2: oklch(0.62 0.10 220); /* pine #31748f */
+  --color-chart-3: oklch(0.84 0.12 75);  /* gold #f6c177 */
+  --color-chart-4: oklch(0.76 0.10 300); /* iris #c4a7e7 */
+  --color-chart-5: oklch(0.68 0.18 10);  /* love #eb6f92 */
+
+  /* highlight.js token */
+  --hljs-bg: oklch(0.16 0.025 285);
+  --hljs-fg: oklch(0.90 0.015 285);
+  --hljs-comment: oklch(0.55 0.02 285);
+  --hljs-keyword: oklch(0.62 0.10 220); /* pine */
+  --hljs-string: oklch(0.84 0.12 75);   /* gold */
+  --hljs-number: oklch(0.82 0.10 15);   /* rose */
+  --hljs-title: oklch(0.76 0.10 300);   /* iris */
+  --hljs-attr: oklch(0.68 0.18 10);     /* love */
+  --hljs-built_in: oklch(0.76 0.10 180);/* foam #9ccfd8 */
+
+  /* monaco token */
+  --monaco-bg: oklch(0.18 0.025 285);
+  --monaco-fg: oklch(0.90 0.015 285);
+  --monaco-line-number: oklch(0.48 0.02 285);
+  --monaco-line-number-active: oklch(0.90 0.015 285);
+  --monaco-line-highlight: oklch(0.24 0.03 285);
+  --monaco-selection: oklch(0.33 0.04 285);
+  --monaco-widget-bg: oklch(0.23 0.03 285);
+  --monaco-widget-border: oklch(0.32 0.03 285);
+  --monaco-gutter-bg: oklch(0.18 0.025 285);
+  --monaco-scroll-thumb: oklch(0.32 0.03 285);
+
+  --mermaid-theme: dark;
+}

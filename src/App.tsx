@@ -4,12 +4,10 @@ import {
   Columns2,
   Eye,
   Hammer,
-  Sun,
-  Moon,
   Upload,
   FolderUp,
 } from "lucide-react";
-import { useTheme } from "next-themes";
+import { ThemeSelector } from "@/components/theme/ThemeSelector";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -87,41 +85,6 @@ function initialSidebarTab(): SidebarTab {
 
 // 提前注册 MonacoEnvironment，避免首次创建编辑器时才配置的竞态
 setupMonaco();
-
-const THEME_ORDER = ["light", "dark"] as const;
-const THEME_META: Record<
-  (typeof THEME_ORDER)[number],
-  { label: string; icon: typeof Sun }
-> = {
-  light: { label: "浅色主题", icon: Sun },
-  dark: { label: "深色主题", icon: Moon },
-};
-
-function ThemeToggle() {
-  const { theme, setTheme } = useTheme();
-  const [mounted, setMounted] = useState(false);
-  useEffect(() => setMounted(true), []);
-  const current: (typeof THEME_ORDER)[number] =
-    theme === "dark" ? "dark" : "light";
-  const meta = THEME_META[current];
-  const Icon = meta.icon;
-  return (
-    <button
-      type="button"
-      title={meta.label}
-      aria-label={meta.label}
-      onClick={() => {
-        const idx = THEME_ORDER.indexOf(current);
-        setTheme(THEME_ORDER[(idx + 1) % THEME_ORDER.length]);
-      }}
-      className="border border-border bg-background p-2 text-muted-foreground transition-colors hover:bg-accent hover:text-accent-foreground"
-    >
-      {/* SSR/水合前固定图标，避免闪烁 */}
-      <Icon className="h-4 w-4" aria-hidden />
-      <span className="sr-only">{mounted ? meta.label : "切换主题"}</span>
-    </button>
-  );
-}
 
 /** 深度优先找到第一个文件节点（初始选中用） */
 function firstFile(nodes: WsNode[]): WsFile | null {
@@ -523,7 +486,7 @@ export default function App() {
             </div>
           )}
 
-          <ThemeToggle />
+          <ThemeSelector />
         </div>
       </header>
 

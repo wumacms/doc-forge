@@ -1,0 +1,131 @@
+/* Synthwave '84 复古波浪霓虹主题 (Light & Dark) */
+
+/* ─── Synthwave Light (Sunset 80s 晚霞) ─── */
+[data-style="synthwave"] {
+  --font-sans: 'Trebuchet MS', 'Century Gothic', -apple-system, sans-serif;
+  --font-serif: 'Georgia', serif;
+  --font-mono: 'VT323', 'Fira Code', 'Menlo', monospace;
+
+  --color-background: oklch(0.97 0.015 330); /* 浅粉晚霞底 #fdf2f8 */
+  --color-foreground: oklch(0.28 0.05 320);  /* 深复古紫灰 */
+  --color-card: oklch(0.93 0.02 330);
+  --color-card-foreground: oklch(0.28 0.05 320);
+  --color-popover: oklch(0.97 0.015 330);
+  --color-popover-foreground: oklch(0.28 0.05 320);
+  --color-primary: oklch(0.58 0.24 340);     /* 霓虹热粉 #db2777 */
+  --color-primary-foreground: oklch(1.0000 0 0);
+  --color-secondary: oklch(0.90 0.02 330);
+  --color-secondary-foreground: oklch(0.28 0.05 320);
+  --color-muted: oklch(0.91 0.015 330);
+  --color-muted-foreground: oklch(0.55 0.03 320);
+  --color-accent: oklch(0.88 0.04 340);
+  --color-accent-foreground: oklch(0.50 0.24 340);
+  --color-destructive: oklch(0.58 0.24 25);
+  --color-destructive-foreground: oklch(1.0000 0 0);
+  --color-border: oklch(0.86 0.03 330);
+  --color-input: oklch(0.90 0.02 330);
+  --color-ring: oklch(0.58 0.24 340);
+
+  --color-sidebar: oklch(0.95 0.018 330);
+  --color-sidebar-foreground: oklch(0.28 0.05 320);
+  --color-sidebar-primary: oklch(0.58 0.24 340);
+  --color-sidebar-primary-foreground: oklch(1.0000 0 0);
+  --color-sidebar-accent: oklch(0.88 0.04 340);
+  --color-sidebar-accent-foreground: oklch(0.50 0.24 340);
+  --color-sidebar-border: oklch(0.86 0.03 330);
+  --color-sidebar-ring: oklch(0.58 0.24 340);
+
+  --color-chart-1: oklch(0.58 0.24 340); /* 热粉 */
+  --color-chart-2: oklch(0.60 0.18 215); /* 电子青 */
+  --color-chart-3: oklch(0.65 0.20 75);  /* 晚霞橙 */
+  --color-chart-4: oklch(0.55 0.22 300); /* 激光紫 */
+  --color-chart-5: oklch(0.62 0.18 145); /* 霓虹绿 */
+
+  /* highlight.js token */
+  --hljs-bg: oklch(0.93 0.02 330);
+  --hljs-fg: oklch(0.28 0.05 320);
+  --hljs-comment: oklch(0.58 0.03 320);
+  --hljs-keyword: oklch(0.58 0.24 340); /* 热粉 */
+  --hljs-string: oklch(0.60 0.18 215);  /* 电子青 */
+  --hljs-number: oklch(0.65 0.20 75);   /* 晚霞橙 */
+  --hljs-title: oklch(0.55 0.22 300);   /* 激光紫 */
+  --hljs-attr: oklch(0.58 0.20 25);     /* 激光红 */
+  --hljs-built_in: oklch(0.60 0.18 215);
+
+  /* monaco token */
+  --monaco-bg: oklch(0.97 0.015 330);
+  --monaco-fg: oklch(0.28 0.05 320);
+  --monaco-line-number: oklch(0.62 0.03 320);
+  --monaco-line-number-active: oklch(0.28 0.05 320);
+  --monaco-line-highlight: oklch(0.92 0.02 340);
+  --monaco-selection: oklch(0.85 0.05 340);
+  --monaco-widget-bg: oklch(0.93 0.02 330);
+  --monaco-widget-border: oklch(0.86 0.03 330);
+  --monaco-gutter-bg: oklch(0.97 0.015 330);
+  --monaco-scroll-thumb: oklch(0.84 0.03 330);
+
+  --mermaid-theme: default;
+}
+
+/* ─── Synthwave '84 Dark (Neon Night 赛博街机) ─── */
+[data-style="synthwave"].dark {
+  --color-background: oklch(0.20 0.03 310);  /* 深夜幕紫黑 #241b2f */
+  --color-foreground: oklch(0.92 0.02 310);  /* 荧光白粉 #f8f0f6 */
+  --color-card: oklch(0.25 0.04 310);        /* #2e223d */
+  --color-card-foreground: oklch(0.92 0.02 310);
+  --color-popover: oklch(0.20 0.03 310);
+  --color-popover-foreground: oklch(0.92 0.02 310);
+  --color-primary: oklch(0.78 0.22 340);     /* 霓虹发光粉 #ff7edb */
+  --color-primary-foreground: oklch(0.18 0.03 310);
+  --color-secondary: oklch(0.30 0.04 310);
+  --color-secondary-foreground: oklch(0.92 0.02 310);
+  --color-muted: oklch(0.26 0.03 310);
+  --color-muted-foreground: oklch(0.65 0.03 310); /* #847290 */
+  --color-accent: oklch(0.32 0.06 330);
+  --color-accent-foreground: oklch(0.85 0.18 340);
+  --color-destructive: oklch(0.68 0.22 25);  /* #fe4450 */
+  --color-destructive-foreground: oklch(1.0000 0 0);
+  --color-border: oklch(0.36 0.04 310);
+  --color-input: oklch(0.28 0.04 310);
+  --color-ring: oklch(0.78 0.22 340);
+
+  --color-sidebar: oklch(0.17 0.03 310);     /* #1c1426 */
+  --color-sidebar-foreground: oklch(0.92 0.02 310);
+  --color-sidebar-primary: oklch(0.78 0.22 340);
+  --color-sidebar-primary-foreground: oklch(0.18 0.03 310);
+  --color-sidebar-accent: oklch(0.32 0.06 330);
+  --color-sidebar-accent-foreground: oklch(0.85 0.18 340);
+  --color-sidebar-border: oklch(0.32 0.04 310);
+  --color-sidebar-ring: oklch(0.78 0.22 340);
+
+  --color-chart-1: oklch(0.78 0.22 340); /* 霓虹粉 #ff7edb */
+  --color-chart-2: oklch(0.84 0.18 200); /* 电子青 #36f9f6 */
+  --color-chart-3: oklch(0.86 0.18 85);  /* 激光金 #fede5d */
+  --color-chart-4: oklch(0.75 0.18 290); /* 荧光紫 #b893ff */
+  --color-chart-5: oklch(0.70 0.22 25);  /* 霓虹红 #fe4450 */
+
+  /* highlight.js token */
+  --hljs-bg: oklch(0.17 0.03 310);
+  --hljs-fg: oklch(0.92 0.02 310);
+  --hljs-comment: oklch(0.55 0.03 310);
+  --hljs-keyword: oklch(0.78 0.22 340); /* 霓虹粉 */
+  --hljs-string: oklch(0.86 0.18 85);   /* 激光金 */
+  --hljs-number: oklch(0.75 0.18 290);  /* 荧光紫 */
+  --hljs-title: oklch(0.84 0.18 200);   /* 电子青 */
+  --hljs-attr: oklch(0.70 0.22 25);     /* 霓虹红 */
+  --hljs-built_in: oklch(0.84 0.18 200);
+
+  /* monaco token */
+  --monaco-bg: oklch(0.20 0.03 310);
+  --monaco-fg: oklch(0.92 0.02 310);
+  --monaco-line-number: oklch(0.52 0.03 310);
+  --monaco-line-number-active: oklch(0.92 0.02 310);
+  --monaco-line-highlight: oklch(0.25 0.04 310);
+  --monaco-selection: oklch(0.38 0.06 330);
+  --monaco-widget-bg: oklch(0.25 0.04 310);
+  --monaco-widget-border: oklch(0.36 0.04 310);
+  --monaco-gutter-bg: oklch(0.20 0.03 310);
+  --monaco-scroll-thumb: oklch(0.36 0.04 310);
+
+  --mermaid-theme: dark;
+}

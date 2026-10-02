@@ -1,0 +1,131 @@
+/* Everforest 常青森林护眼主题 (Light & Dark) */
+
+/* ─── Everforest Light ─── */
+[data-style="everforest"] {
+  --font-sans: 'Optima', 'Candara', 'PingFang SC', -apple-system, sans-serif;
+  --font-serif: 'Georgia', serif;
+  --font-mono: 'Iosevka', 'Fira Code', Menlo, monospace;
+
+  --color-background: oklch(0.96 0.015 115); /* #fdf6e3 */
+  --color-foreground: oklch(0.35 0.025 140); /* #5c6a72 */
+  --color-card: oklch(0.92 0.02 115);        /* #efebd4 */
+  --color-card-foreground: oklch(0.35 0.025 140);
+  --color-popover: oklch(0.96 0.015 115);
+  --color-popover-foreground: oklch(0.35 0.025 140);
+  --color-primary: oklch(0.55 0.14 135);     /* forest green #8da101 */
+  --color-primary-foreground: oklch(1.0000 0 0);
+  --color-secondary: oklch(0.88 0.02 115);
+  --color-secondary-foreground: oklch(0.35 0.025 140);
+  --color-muted: oklch(0.90 0.018 115);
+  --color-muted-foreground: oklch(0.55 0.02 140); /* #939f91 */
+  --color-accent: oklch(0.88 0.03 135);
+  --color-accent-foreground: oklch(0.48 0.14 135);
+  --color-destructive: oklch(0.58 0.18 25);       /* red #f85552 */
+  --color-destructive-foreground: oklch(1.0000 0 0);
+  --color-border: oklch(0.85 0.02 115);
+  --color-input: oklch(0.89 0.018 115);
+  --color-ring: oklch(0.55 0.14 135);
+
+  --color-sidebar: oklch(0.94 0.015 115);
+  --color-sidebar-foreground: oklch(0.35 0.025 140);
+  --color-sidebar-primary: oklch(0.55 0.14 135);
+  --color-sidebar-primary-foreground: oklch(1.0000 0 0);
+  --color-sidebar-accent: oklch(0.88 0.03 135);
+  --color-sidebar-accent-foreground: oklch(0.48 0.14 135);
+  --color-sidebar-border: oklch(0.85 0.02 115);
+  --color-sidebar-ring: oklch(0.55 0.14 135);
+
+  --color-chart-1: oklch(0.55 0.14 135); /* forest green */
+  --color-chart-2: oklch(0.62 0.12 165); /* sage */
+  --color-chart-3: oklch(0.68 0.14 85);  /* amber #dfa000 */
+  --color-chart-4: oklch(0.55 0.12 215); /* blue #3a94c5 */
+  --color-chart-5: oklch(0.60 0.16 45);  /* orange #f57d26 */
+
+  /* highlight.js token */
+  --hljs-bg: oklch(0.92 0.02 115);
+  --hljs-fg: oklch(0.35 0.025 140);
+  --hljs-comment: oklch(0.58 0.02 140);
+  --hljs-keyword: oklch(0.55 0.14 135); /* green */
+  --hljs-string: oklch(0.60 0.16 45);   /* orange */
+  --hljs-number: oklch(0.60 0.15 320);  /* purple #df69ba */
+  --hljs-title: oklch(0.55 0.12 215);   /* blue */
+  --hljs-attr: oklch(0.62 0.12 165);    /* sage */
+  --hljs-built_in: oklch(0.68 0.14 85); /* amber */
+
+  /* monaco token */
+  --monaco-bg: oklch(0.96 0.015 115);
+  --monaco-fg: oklch(0.35 0.025 140);
+  --monaco-line-number: oklch(0.65 0.02 140);
+  --monaco-line-number-active: oklch(0.35 0.025 140);
+  --monaco-line-highlight: oklch(0.92 0.02 115);
+  --monaco-selection: oklch(0.85 0.03 135);
+  --monaco-widget-bg: oklch(0.92 0.02 115);
+  --monaco-widget-border: oklch(0.85 0.02 115);
+  --monaco-gutter-bg: oklch(0.96 0.015 115);
+  --monaco-scroll-thumb: oklch(0.84 0.02 115);
+
+  --mermaid-theme: forest;
+}
+
+/* ─── Everforest Dark ─── */
+[data-style="everforest"].dark {
+  --color-background: oklch(0.24 0.02 145);  /* forest dark #2d353b */
+  --color-foreground: oklch(0.86 0.02 110);  /* text #d3c6aa */
+  --color-card: oklch(0.29 0.025 145);       /* surface #343f44 */
+  --color-card-foreground: oklch(0.86 0.02 110);
+  --color-popover: oklch(0.24 0.02 145);
+  --color-popover-foreground: oklch(0.86 0.02 110);
+  --color-primary: oklch(0.78 0.12 135);     /* green #a7c080 */
+  --color-primary-foreground: oklch(0.18 0.02 145);
+  --color-secondary: oklch(0.32 0.025 145);
+  --color-secondary-foreground: oklch(0.86 0.02 110);
+  --color-muted: oklch(0.27 0.02 145);
+  --color-muted-foreground: oklch(0.62 0.02 135); /* #859289 */
+  --color-accent: oklch(0.33 0.03 140);
+  --color-accent-foreground: oklch(0.82 0.10 135);
+  --color-destructive: oklch(0.65 0.18 25);       /* red #e67e80 */
+  --color-destructive-foreground: oklch(1.0000 0 0);
+  --color-border: oklch(0.36 0.025 145);
+  --color-input: oklch(0.30 0.025 145);
+  --color-ring: oklch(0.78 0.12 135);
+
+  --color-sidebar: oklch(0.20 0.02 145);     /* #232a2e */
+  --color-sidebar-foreground: oklch(0.86 0.02 110);
+  --color-sidebar-primary: oklch(0.78 0.12 135);
+  --color-sidebar-primary-foreground: oklch(0.18 0.02 145);
+  --color-sidebar-accent: oklch(0.33 0.03 140);
+  --color-sidebar-accent-foreground: oklch(0.82 0.10 135);
+  --color-sidebar-border: oklch(0.32 0.025 145);
+  --color-sidebar-ring: oklch(0.78 0.12 135);
+
+  --color-chart-1: oklch(0.78 0.12 135); /* green #a7c080 */
+  --color-chart-2: oklch(0.78 0.10 165); /* sage #83c092 */
+  --color-chart-3: oklch(0.80 0.12 85);  /* amber #dbbc7f */
+  --color-chart-4: oklch(0.76 0.10 205); /* cyan #7fbbb3 */
+  --color-chart-5: oklch(0.72 0.14 45);  /* orange #e69875 */
+
+  /* highlight.js token */
+  --hljs-bg: oklch(0.21 0.02 145);
+  --hljs-fg: oklch(0.86 0.02 110);
+  --hljs-comment: oklch(0.55 0.02 135);
+  --hljs-keyword: oklch(0.78 0.12 135); /* green */
+  --hljs-string: oklch(0.72 0.14 45);   /* orange */
+  --hljs-number: oklch(0.76 0.12 320);  /* purple #d699b6 */
+  --hljs-title: oklch(0.76 0.10 205);   /* cyan */
+  --hljs-attr: oklch(0.78 0.10 165);    /* sage */
+  --hljs-built_in: oklch(0.80 0.12 85); /* amber */
+
+  /* monaco token */
+  --monaco-bg: oklch(0.24 0.02 145);
+  --monaco-fg: oklch(0.86 0.02 110);
+  --monaco-line-number: oklch(0.48 0.02 135);
+  --monaco-line-number-active: oklch(0.86 0.02 110);
+  --monaco-line-highlight: oklch(0.28 0.025 145);
+  --monaco-selection: oklch(0.35 0.03 140);
+  --monaco-widget-bg: oklch(0.29 0.025 145);
+  --monaco-widget-border: oklch(0.36 0.025 145);
+  --monaco-gutter-bg: oklch(0.24 0.02 145);
+  --monaco-scroll-thumb: oklch(0.35 0.02 145);
+
+  --mermaid-theme: forest;
+}

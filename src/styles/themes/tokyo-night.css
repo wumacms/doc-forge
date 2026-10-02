@@ -1,0 +1,131 @@
+/* Tokyo Night 涩谷霓虹夜色主题 (Light: Day / Dark: Night) */
+
+/* ─── Tokyo Day (Light) ─── */
+[data-style="tokyo-night"] {
+  --font-sans: 'Inter', -apple-system, 'SF Pro Display', 'Segoe UI', sans-serif;
+  --font-serif: 'Georgia', serif;
+  --font-mono: 'JetBrains Mono', 'Fira Code', 'Menlo', monospace;
+
+  --color-background: oklch(0.95 0.01 260); /* #e1e2e7 */
+  --color-foreground: oklch(0.35 0.04 265); /* #3760bf */
+  --color-card: oklch(0.91 0.015 260);
+  --color-card-foreground: oklch(0.35 0.04 265);
+  --color-popover: oklch(0.95 0.01 260);
+  --color-popover-foreground: oklch(0.35 0.04 265);
+  --color-primary: oklch(0.55 0.20 260);     /* #2e7de9 */
+  --color-primary-foreground: oklch(1.0000 0 0);
+  --color-secondary: oklch(0.88 0.015 260);
+  --color-secondary-foreground: oklch(0.35 0.04 265);
+  --color-muted: oklch(0.89 0.015 260);
+  --color-muted-foreground: oklch(0.55 0.03 265); /* #6172b0 */
+  --color-accent: oklch(0.88 0.03 260);
+  --color-accent-foreground: oklch(0.50 0.20 260);
+  --color-destructive: oklch(0.58 0.22 25);        /* #f52a65 */
+  --color-destructive-foreground: oklch(1.0000 0 0);
+  --color-border: oklch(0.84 0.02 260);
+  --color-input: oklch(0.88 0.015 260);
+  --color-ring: oklch(0.55 0.20 260);
+
+  --color-sidebar: oklch(0.93 0.012 260);
+  --color-sidebar-foreground: oklch(0.35 0.04 265);
+  --color-sidebar-primary: oklch(0.55 0.20 260);
+  --color-sidebar-primary-foreground: oklch(1.0000 0 0);
+  --color-sidebar-accent: oklch(0.88 0.03 260);
+  --color-sidebar-accent-foreground: oklch(0.50 0.20 260);
+  --color-sidebar-border: oklch(0.84 0.02 260);
+  --color-sidebar-ring: oklch(0.55 0.20 260);
+
+  --color-chart-1: oklch(0.55 0.20 260); /* blue #2e7de9 */
+  --color-chart-2: oklch(0.58 0.16 145); /* green #587539 */
+  --color-chart-3: oklch(0.62 0.18 55);  /* orange #b15c00 */
+  --color-chart-4: oklch(0.55 0.22 300); /* purple #9854f1 */
+  --color-chart-5: oklch(0.55 0.16 210); /* cyan #007197 */
+
+  /* highlight.js token */
+  --hljs-bg: oklch(0.91 0.015 260);
+  --hljs-fg: oklch(0.35 0.04 265);
+  --hljs-comment: oklch(0.60 0.03 265);
+  --hljs-keyword: oklch(0.55 0.22 300); /* purple */
+  --hljs-string: oklch(0.58 0.16 145);  /* green */
+  --hljs-number: oklch(0.62 0.18 55);   /* orange */
+  --hljs-title: oklch(0.55 0.20 260);   /* blue */
+  --hljs-attr: oklch(0.55 0.16 210);    /* cyan */
+  --hljs-built_in: oklch(0.58 0.22 25); /* red */
+
+  /* monaco token */
+  --monaco-bg: oklch(0.95 0.01 260);
+  --monaco-fg: oklch(0.35 0.04 265);
+  --monaco-line-number: oklch(0.62 0.03 265);
+  --monaco-line-number-active: oklch(0.35 0.04 265);
+  --monaco-line-highlight: oklch(0.91 0.015 260);
+  --monaco-selection: oklch(0.85 0.04 260);
+  --monaco-widget-bg: oklch(0.91 0.015 260);
+  --monaco-widget-border: oklch(0.84 0.02 260);
+  --monaco-gutter-bg: oklch(0.95 0.01 260);
+  --monaco-scroll-thumb: oklch(0.82 0.02 260);
+
+  --mermaid-theme: default;
+}
+
+/* ─── Tokyo Night (Dark) ─── */
+[data-style="tokyo-night"].dark {
+  --color-background: oklch(0.18 0.03 270); /* #1a1b26 */
+  --color-foreground: oklch(0.86 0.03 265); /* #c0caf5 */
+  --color-card: oklch(0.24 0.035 270);      /* #24283b */
+  --color-card-foreground: oklch(0.86 0.03 265);
+  --color-popover: oklch(0.18 0.03 270);
+  --color-popover-foreground: oklch(0.86 0.03 265);
+  --color-primary: oklch(0.74 0.15 260);    /* #7aa2f7 */
+  --color-primary-foreground: oklch(0.16 0.03 270);
+  --color-secondary: oklch(0.28 0.035 270);
+  --color-secondary-foreground: oklch(0.86 0.03 265);
+  --color-muted: oklch(0.22 0.03 270);
+  --color-muted-foreground: oklch(0.58 0.03 265); /* #565f89 */
+  --color-accent: oklch(0.30 0.04 270);
+  --color-accent-foreground: oklch(0.80 0.14 260);
+  --color-destructive: oklch(0.68 0.22 20);       /* #f7768e */
+  --color-destructive-foreground: oklch(1.0000 0 0);
+  --color-border: oklch(0.32 0.035 270);
+  --color-input: oklch(0.26 0.035 270);
+  --color-ring: oklch(0.74 0.15 260);
+
+  --color-sidebar: oklch(0.16 0.03 270);    /* #16161e */
+  --color-sidebar-foreground: oklch(0.86 0.03 265);
+  --color-sidebar-primary: oklch(0.74 0.15 260);
+  --color-sidebar-primary-foreground: oklch(0.16 0.03 270);
+  --color-sidebar-accent: oklch(0.30 0.04 270);
+  --color-sidebar-accent-foreground: oklch(0.80 0.14 260);
+  --color-sidebar-border: oklch(0.28 0.035 270);
+  --color-sidebar-ring: oklch(0.74 0.15 260);
+
+  --color-chart-1: oklch(0.74 0.15 260); /* blue #7aa2f7 */
+  --color-chart-2: oklch(0.82 0.15 145); /* green #9ece6a */
+  --color-chart-3: oklch(0.78 0.16 65);  /* orange #ff9e64 */
+  --color-chart-4: oklch(0.76 0.15 305); /* purple #bb9af7 */
+  --color-chart-5: oklch(0.82 0.13 205); /* cyan #7dcfff */
+
+  /* highlight.js token */
+  --hljs-bg: oklch(0.16 0.03 270);
+  --hljs-fg: oklch(0.86 0.03 265);
+  --hljs-comment: oklch(0.50 0.03 265);
+  --hljs-keyword: oklch(0.76 0.15 305); /* purple */
+  --hljs-string: oklch(0.82 0.15 145);  /* green */
+  --hljs-number: oklch(0.78 0.16 65);   /* orange */
+  --hljs-title: oklch(0.74 0.15 260);   /* blue */
+  --hljs-attr: oklch(0.82 0.13 205);    /* cyan */
+  --hljs-built_in: oklch(0.68 0.22 20); /* red */
+
+  /* monaco token */
+  --monaco-bg: oklch(0.18 0.03 270);
+  --monaco-fg: oklch(0.86 0.03 265);
+  --monaco-line-number: oklch(0.48 0.03 265);
+  --monaco-line-number-active: oklch(0.86 0.03 265);
+  --monaco-line-highlight: oklch(0.23 0.035 270);
+  --monaco-selection: oklch(0.33 0.04 270);
+  --monaco-widget-bg: oklch(0.24 0.035 270);
+  --monaco-widget-border: oklch(0.32 0.035 270);
+  --monaco-gutter-bg: oklch(0.18 0.03 270);
+  --monaco-scroll-thumb: oklch(0.30 0.035 270);
+
+  --mermaid-theme: dark;
+}

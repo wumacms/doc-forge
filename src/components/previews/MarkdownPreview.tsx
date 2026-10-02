@@ -1,4 +1,7 @@
 import { useEffect, useRef, useState, type ReactNode } from "react";
+import { useTheme } from "next-themes";
+import { useDocTheme } from "@/context/StyleContext";
+import { getCurrentMermaidTheme } from "@/lib/theme/themeBridge";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import remarkMath from "remark-math";
@@ -13,6 +16,8 @@ let mermaidSeq = 0;
 function MermaidBlock({ code }: { code: string }) {
   const ref = useRef<HTMLDivElement>(null);
   const [error, setError] = useState<string | null>(null);
+  const { resolvedTheme } = useTheme();
+  const { style } = useDocTheme();
 
   useEffect(() => {
     let cancelled = false;
@@ -20,10 +25,14 @@ function MermaidBlock({ code }: { code: string }) {
     (async () => {
       try {
         const mermaid = (await import("mermaid")).default;
+        const currentTheme = getCurrentMermaidTheme();
+        const fontSans =
+          getComputedStyle(document.documentElement).getPropertyValue("--font-sans").trim() ||
+          "sans-serif";
         mermaid.initialize({
           startOnLoad: false,
-          theme: "neutral",
-          fontFamily: "Open Sans, sans-serif",
+          theme: currentTheme,
+          fontFamily: fontSans,
         });
         const id = `mermaid-${++mermaidSeq}`;
         const { svg } = await mermaid.render(id, code);
@@ -40,7 +49,7 @@ function MermaidBlock({ code }: { code: string }) {
       // mermaid 渲染失败时可能残留诊断节点
       document.getElementById(diagId)?.remove();
     };
-  }, [code]);
+  }, [code, resolvedTheme, style]);
 
   if (error) {
     return (

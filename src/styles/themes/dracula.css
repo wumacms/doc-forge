@@ -1,0 +1,127 @@
+/* Dracula 吸血鬼经典主题风格定义 (Light & Dark) */
+
+/* ─── Dracula Light (Alucard) ─── */
+[data-style="dracula"] {
+  --color-background: oklch(0.97 0.01 290);
+  --color-foreground: oklch(0.28 0.03 280);
+  --color-card: oklch(0.94 0.015 290);
+  --color-card-foreground: oklch(0.28 0.03 280);
+  --color-popover: oklch(0.97 0.01 290);
+  --color-popover-foreground: oklch(0.28 0.03 280);
+  --color-primary: oklch(0.55 0.22 310); /* dracula purple */
+  --color-primary-foreground: oklch(1.0000 0 0);
+  --color-secondary: oklch(0.91 0.015 290);
+  --color-secondary-foreground: oklch(0.28 0.03 280);
+  --color-muted: oklch(0.92 0.01 290);
+  --color-muted-foreground: oklch(0.55 0.02 280);
+  --color-accent: oklch(0.89 0.03 310);
+  --color-accent-foreground: oklch(0.48 0.22 310);
+  --color-destructive: oklch(0.58 0.22 25);
+  --color-destructive-foreground: oklch(1.0000 0 0);
+  --color-border: oklch(0.87 0.02 290);
+  --color-input: oklch(0.92 0.01 290);
+  --color-ring: oklch(0.55 0.22 310);
+
+  --color-sidebar: oklch(0.95 0.015 290);
+  --color-sidebar-foreground: oklch(0.28 0.03 280);
+  --color-sidebar-primary: oklch(0.55 0.22 310);
+  --color-sidebar-primary-foreground: oklch(1.0000 0 0);
+  --color-sidebar-accent: oklch(0.89 0.03 310);
+  --color-sidebar-accent-foreground: oklch(0.48 0.22 310);
+  --color-sidebar-border: oklch(0.87 0.02 290);
+  --color-sidebar-ring: oklch(0.55 0.22 310);
+
+  --color-chart-1: oklch(0.55 0.22 310); /* purple */
+  --color-chart-2: oklch(0.65 0.22 350); /* pink */
+  --color-chart-3: oklch(0.68 0.16 190); /* cyan */
+  --color-chart-4: oklch(0.70 0.18 135); /* green */
+  --color-chart-5: oklch(0.75 0.16 80);  /* yellow */
+
+  /* highlight.js token */
+  --hljs-bg: oklch(0.94 0.015 290);
+  --hljs-fg: oklch(0.28 0.03 280);
+  --hljs-comment: oklch(0.58 0.02 280);
+  --hljs-keyword: oklch(0.55 0.22 350); /* pink */
+  --hljs-string: oklch(0.60 0.16 80);   /* yellow */
+  --hljs-number: oklch(0.55 0.22 310);  /* purple */
+  --hljs-title: oklch(0.52 0.18 135);   /* green */
+  --hljs-attr: oklch(0.52 0.16 190);    /* cyan */
+  --hljs-built_in: oklch(0.58 0.18 45);
+
+  /* monaco token */
+  --monaco-bg: oklch(0.97 0.01 290);
+  --monaco-fg: oklch(0.28 0.03 280);
+  --monaco-line-number: oklch(0.62 0.02 280);
+  --monaco-line-number-active: oklch(0.28 0.03 280);
+  --monaco-line-highlight: oklch(0.93 0.02 310);
+  --monaco-selection: oklch(0.86 0.05 310);
+  --monaco-widget-bg: oklch(0.94 0.015 290);
+  --monaco-widget-border: oklch(0.87 0.02 290);
+  --monaco-gutter-bg: oklch(0.97 0.01 290);
+  --monaco-scroll-thumb: oklch(0.86 0.02 290);
+
+  --mermaid-theme: default;
+}
+
+/* ─── Dracula Dark (Official Dark) ─── */
+[data-style="dracula"].dark {
+  --color-background: oklch(0.22 0.03 275); /* dracula bg #282a36 */
+  --color-foreground: oklch(0.95 0.01 280); /* dracula fg #f8f8f2 */
+  --color-card: oklch(0.26 0.03 275);       /* current line #44475a */
+  --color-card-foreground: oklch(0.95 0.01 280);
+  --color-popover: oklch(0.22 0.03 275);
+  --color-popover-foreground: oklch(0.95 0.01 280);
+  --color-primary: oklch(0.72 0.18 310);    /* purple #bd93f9 */
+  --color-primary-foreground: oklch(0.18 0.03 275);
+  --color-secondary: oklch(0.32 0.03 275);
+  --color-secondary-foreground: oklch(0.95 0.01 280);
+  --color-muted: oklch(0.28 0.03 275);
+  --color-muted-foreground: oklch(0.62 0.03 275); /* comment #6272a4 */
+  --color-accent: oklch(0.33 0.04 280);
+  --color-accent-foreground: oklch(0.80 0.16 350); /* pink #ff79c6 */
+  --color-destructive: oklch(0.68 0.22 25);        /* red #ff5555 */
+  --color-destructive-foreground: oklch(1.0000 0 0);
+  --color-border: oklch(0.35 0.03 275);
+  --color-input: oklch(0.30 0.03 275);
+  --color-ring: oklch(0.72 0.18 310);
+
+  --color-sidebar: oklch(0.20 0.03 275);
+  --color-sidebar-foreground: oklch(0.95 0.01 280);
+  --color-sidebar-primary: oklch(0.72 0.18 310);
+  --color-sidebar-primary-foreground: oklch(0.18 0.03 275);
+  --color-sidebar-accent: oklch(0.33 0.04 280);
+  --color-sidebar-accent-foreground: oklch(0.80 0.16 350);
+  --color-sidebar-border: oklch(0.35 0.03 275);
+  --color-sidebar-ring: oklch(0.72 0.18 310);
+
+  --color-chart-1: oklch(0.72 0.18 310); /* purple */
+  --color-chart-2: oklch(0.78 0.18 350); /* pink */
+  --color-chart-3: oklch(0.82 0.14 190); /* cyan #8be9fd */
+  --color-chart-4: oklch(0.84 0.16 135); /* green #50fa7b */
+  --color-chart-5: oklch(0.88 0.16 85);  /* yellow #f1fa8c */
+
+  /* highlight.js token */
+  --hljs-bg: oklch(0.19 0.03 275);
+  --hljs-fg: oklch(0.95 0.01 280);
+  --hljs-comment: oklch(0.60 0.04 275);
+  --hljs-keyword: oklch(0.78 0.18 350); /* pink */
+  --hljs-string: oklch(0.88 0.16 85);   /* yellow */
+  --hljs-number: oklch(0.72 0.18 310);  /* purple */
+  --hljs-title: oklch(0.84 0.16 135);   /* green */
+  --hljs-attr: oklch(0.82 0.14 190);    /* cyan */
+  --hljs-built_in: oklch(0.82 0.14 190);
+
+  /* monaco token */
+  --monaco-bg: oklch(0.22 0.03 275);
+  --monaco-fg: oklch(0.95 0.01 280);
+  --monaco-line-number: oklch(0.55 0.03 275);
+  --monaco-line-number-active: oklch(0.95 0.01 280);
+  --monaco-line-highlight: oklch(0.27 0.03 275);
+  --monaco-selection: oklch(0.38 0.05 285);
+  --monaco-widget-bg: oklch(0.25 0.03 275);
+  --monaco-widget-border: oklch(0.35 0.03 275);
+  --monaco-gutter-bg: oklch(0.22 0.03 275);
+  --monaco-scroll-thumb: oklch(0.35 0.03 275);
+
+  --mermaid-theme: dark;
+}

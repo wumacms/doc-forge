@@ -1,9 +1,26 @@
 @import "tailwindcss";
 @plugin "tailwindcss-animate";
+@import "./styles/themes/github.css";
+@import "./styles/themes/nord.css";
+@import "./styles/themes/dracula.css";
+@import "./styles/themes/one-dark.css";
+@import "./styles/themes/solarized.css";
+@import "./styles/themes/catppuccin.css";
+@import "./styles/themes/tokyo-night.css";
+@import "./styles/themes/coffee.css";
+@import "./styles/themes/monokai.css";
+@import "./styles/themes/gruvbox.css";
+@import "./styles/themes/rose-pine.css";
+@import "./styles/themes/everforest.css";
+@import "./styles/themes/sepia.css";
+@import "./styles/themes/editorial.css";
+@import "./styles/themes/synthwave.css";
+@import "./styles/themes/jetbrains.css";
 
 @custom-variant dark (&:where(.dark, .dark *));
 
 @theme {
+  --mermaid-theme: neutral;
   --color-background: oklch(1.0000 0 0);
   --color-foreground: oklch(0.1884 0.0128 248.5103);
   --color-card: oklch(0.9784 0.0011 197.1387);
@@ -89,6 +106,7 @@
 }
 
 .dark {
+  --mermaid-theme: dark;
   --color-background: oklch(0 0 0);
   --color-foreground: oklch(0.9328 0.0025 228.7857);
   --color-card: oklch(0.2097 0.0080 274.5332);
@@ -138,5 +156,6 @@
 
   body {
     @apply bg-background text-foreground;
+    font-family: var(--font-sans);
   }
 }

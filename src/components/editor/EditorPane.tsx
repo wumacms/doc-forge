@@ -1,5 +1,6 @@
 import { useEffect, useRef, type MutableRefObject } from "react";
 import { useTheme } from "next-themes";
+import { useDocTheme } from "@/context/StyleContext";
 import { monaco, syncMonacoTheme } from "@/lib/monacoSetup";
 import { resolveParser } from "@/lib/parsers/registry";
 import type { WsFile } from "@/types";
@@ -34,6 +35,14 @@ function languageOf(name: string): string {
   }
 }
 
+function getComputedFontMono(): string {
+  if (typeof document === "undefined") return "Menlo, Monaco, Consolas, monospace";
+  return (
+    getComputedStyle(document.documentElement).getPropertyValue("--font-mono").trim() ||
+    "Menlo, Monaco, Consolas, monospace"
+  );
+}
+
 export default function EditorPane({ file, onChange, onCursorLine, editorRef }: Props) {
   const containerRef = useRef<HTMLDivElement>(null);
   const editorInstanceRef = useRef<monaco.editor.IStandaloneCodeEditor | null>(null);
@@ -42,6 +51,7 @@ export default function EditorPane({ file, onChange, onCursorLine, editorRef }: 
   const onCursorLineRef = useRef(onCursorLine);
   onCursorLineRef.current = onCursorLine;
   const { resolvedTheme } = useTheme();
+  const { style } = useDocTheme();
   // undefined = 尚未解析出主题，交给 DOM class 兜底
   const monacoDark = resolvedTheme ? resolvedTheme === "dark" : undefined;
 
@@ -52,6 +62,7 @@ export default function EditorPane({ file, onChange, onCursorLine, editorRef }: 
       value: "",
       language: "plaintext",
       automaticLayout: true,
+      fontFamily: getComputedFontMono(),
       fontSize: 14,
       lineHeight: 1.7,
       wordWrap: "off",
@@ -78,11 +89,13 @@ export default function EditorPane({ file, onChange, onCursorLine, editorRef }: 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // 主题切换时同步 Monaco 主题（用 resolvedTheme 显式驱动，不读 DOM class，
-  // 避免子组件 effect 先于 ThemeProvider 执行而拿到旧主题）
+  // 主题或风格切换时同步 Monaco 色彩与对应字体
   useEffect(() => {
     syncMonacoTheme(monacoDark);
-  }, [monacoDark]);
+    editorInstanceRef.current?.updateOptions({
+      fontFamily: getComputedFontMono(),
+    });
+  }, [monacoDark, style]);
 
   useEffect(() => {
     const editor = editorInstanceRef.current;

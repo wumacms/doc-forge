@@ -1,0 +1,131 @@
+/* Catppuccin 柔和马卡龙主题 (Light: Latte / Dark: Mocha) */
+
+/* ─── Catppuccin Latte (Light) ─── */
+[data-style="catppuccin"] {
+  --font-sans: 'Nunito', 'Avenir Next', 'PingFang SC', -apple-system, sans-serif;
+  --font-serif: 'Georgia', serif;
+  --font-mono: 'Fira Code', 'Menlo', monospace;
+
+  --color-background: oklch(0.96 0.01 270); /* base #eff1f5 */
+  --color-foreground: oklch(0.38 0.03 275); /* text #4c4f69 */
+  --color-card: oklch(0.92 0.015 270);       /* surface0 #ccd0da */
+  --color-card-foreground: oklch(0.38 0.03 275);
+  --color-popover: oklch(0.96 0.01 270);
+  --color-popover-foreground: oklch(0.38 0.03 275);
+  --color-primary: oklch(0.55 0.22 290);     /* mauve #8839ef */
+  --color-primary-foreground: oklch(1.0000 0 0);
+  --color-secondary: oklch(0.88 0.015 270);
+  --color-secondary-foreground: oklch(0.38 0.03 275);
+  --color-muted: oklch(0.90 0.015 270);
+  --color-muted-foreground: oklch(0.58 0.02 275); /* subtext0 #6c6f85 */
+  --color-accent: oklch(0.88 0.03 290);
+  --color-accent-foreground: oklch(0.48 0.22 290);
+  --color-destructive: oklch(0.58 0.22 25);        /* red #d20f39 */
+  --color-destructive-foreground: oklch(1.0000 0 0);
+  --color-border: oklch(0.85 0.02 270);
+  --color-input: oklch(0.88 0.015 270);
+  --color-ring: oklch(0.55 0.22 290);
+
+  --color-sidebar: oklch(0.94 0.012 270);
+  --color-sidebar-foreground: oklch(0.38 0.03 275);
+  --color-sidebar-primary: oklch(0.55 0.22 290);
+  --color-sidebar-primary-foreground: oklch(1.0000 0 0);
+  --color-sidebar-accent: oklch(0.88 0.03 290);
+  --color-sidebar-accent-foreground: oklch(0.48 0.22 290);
+  --color-sidebar-border: oklch(0.85 0.02 270);
+  --color-sidebar-ring: oklch(0.55 0.22 290);
+
+  --color-chart-1: oklch(0.55 0.22 290); /* mauve */
+  --color-chart-2: oklch(0.60 0.16 140); /* green #40a02b */
+  --color-chart-3: oklch(0.65 0.18 55);  /* peach #fe640b */
+  --color-chart-4: oklch(0.58 0.18 255); /* blue #1e66f5 */
+  --color-chart-5: oklch(0.60 0.20 345); /* pink #ea76cb */
+
+  /* highlight.js token */
+  --hljs-bg: oklch(0.93 0.015 270);
+  --hljs-fg: oklch(0.38 0.03 275);
+  --hljs-comment: oklch(0.62 0.02 275);
+  --hljs-keyword: oklch(0.55 0.22 290); /* mauve */
+  --hljs-string: oklch(0.60 0.16 140);  /* green */
+  --hljs-number: oklch(0.65 0.18 55);   /* peach */
+  --hljs-title: oklch(0.58 0.18 255);   /* blue */
+  --hljs-attr: oklch(0.56 0.15 200);    /* sapphire */
+  --hljs-built_in: oklch(0.60 0.20 345);/* pink */
+
+  /* monaco token */
+  --monaco-bg: oklch(0.96 0.01 270);
+  --monaco-fg: oklch(0.38 0.03 275);
+  --monaco-line-number: oklch(0.65 0.02 275);
+  --monaco-line-number-active: oklch(0.38 0.03 275);
+  --monaco-line-highlight: oklch(0.92 0.015 270);
+  --monaco-selection: oklch(0.85 0.04 290);
+  --monaco-widget-bg: oklch(0.93 0.015 270);
+  --monaco-widget-border: oklch(0.85 0.02 270);
+  --monaco-gutter-bg: oklch(0.96 0.01 270);
+  --monaco-scroll-thumb: oklch(0.84 0.02 270);
+
+  --mermaid-theme: default;
+}
+
+/* ─── Catppuccin Mocha (Dark) ─── */
+[data-style="catppuccin"].dark {
+  --color-background: oklch(0.20 0.025 275); /* base #1e1e2e */
+  --color-foreground: oklch(0.88 0.02 265);  /* text #cdd6f4 */
+  --color-card: oklch(0.26 0.03 275);        /* surface0 #313244 */
+  --color-card-foreground: oklch(0.88 0.02 265);
+  --color-popover: oklch(0.20 0.025 275);
+  --color-popover-foreground: oklch(0.88 0.02 265);
+  --color-primary: oklch(0.76 0.14 300);     /* mauve #cba6f7 */
+  --color-primary-foreground: oklch(0.18 0.025 275);
+  --color-secondary: oklch(0.30 0.03 275);
+  --color-secondary-foreground: oklch(0.88 0.02 265);
+  --color-muted: oklch(0.24 0.025 275);
+  --color-muted-foreground: oklch(0.65 0.025 270); /* subtext0 #a6adc8 */
+  --color-accent: oklch(0.32 0.04 290);
+  --color-accent-foreground: oklch(0.82 0.12 300);
+  --color-destructive: oklch(0.68 0.20 25);        /* red #f38ba8 */
+  --color-destructive-foreground: oklch(1.0000 0 0);
+  --color-border: oklch(0.34 0.03 275);
+  --color-input: oklch(0.28 0.03 275);
+  --color-ring: oklch(0.76 0.14 300);
+
+  --color-sidebar: oklch(0.17 0.025 275);    /* mantle #181825 */
+  --color-sidebar-foreground: oklch(0.88 0.02 265);
+  --color-sidebar-primary: oklch(0.76 0.14 300);
+  --color-sidebar-primary-foreground: oklch(0.18 0.025 275);
+  --color-sidebar-accent: oklch(0.32 0.04 290);
+  --color-sidebar-accent-foreground: oklch(0.82 0.12 300);
+  --color-sidebar-border: oklch(0.30 0.03 275);
+  --color-sidebar-ring: oklch(0.76 0.14 300);
+
+  --color-chart-1: oklch(0.76 0.14 300); /* mauve #cba6f7 */
+  --color-chart-2: oklch(0.82 0.13 145); /* green #a6e3a1 */
+  --color-chart-3: oklch(0.80 0.13 65);  /* peach #fab387 */
+  --color-chart-4: oklch(0.78 0.12 250); /* blue #89b4fa */
+  --color-chart-5: oklch(0.84 0.12 345); /* pink #f5c2e7 */
+
+  /* highlight.js token */
+  --hljs-bg: oklch(0.18 0.025 275);
+  --hljs-fg: oklch(0.88 0.02 265);
+  --hljs-comment: oklch(0.55 0.025 270);
+  --hljs-keyword: oklch(0.76 0.14 300); /* mauve */
+  --hljs-string: oklch(0.82 0.13 145);  /* green */
+  --hljs-number: oklch(0.80 0.13 65);   /* peach */
+  --hljs-title: oklch(0.78 0.12 250);   /* blue */
+  --hljs-attr: oklch(0.80 0.11 210);    /* sapphire #74c7ec */
+  --hljs-built_in: oklch(0.84 0.12 345);/* pink */
+
+  /* monaco token */
+  --monaco-bg: oklch(0.20 0.025 275);
+  --monaco-fg: oklch(0.88 0.02 265);
+  --monaco-line-number: oklch(0.52 0.025 270);
+  --monaco-line-number-active: oklch(0.88 0.02 265);
+  --monaco-line-highlight: oklch(0.25 0.03 275);
+  --monaco-selection: oklch(0.35 0.04 290);
+  --monaco-widget-bg: oklch(0.26 0.03 275);
+  --monaco-widget-border: oklch(0.34 0.03 275);
+  --monaco-gutter-bg: oklch(0.20 0.025 275);
+  --monaco-scroll-thumb: oklch(0.34 0.03 275);
+
+  --mermaid-theme: dark;
+}

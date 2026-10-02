@@ -1,0 +1,131 @@
+/* One Dark / One Light 主题风格定义 (Light & Dark) */
+
+/* ─── One Light ─── */
+[data-style="one-dark"] {
+  --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-serif: 'Georgia', serif;
+  --font-mono: 'Fira Code', Menlo, Monaco, Consolas, monospace;
+
+  --color-background: oklch(0.98 0.005 250); /* #fafafa */
+  --color-foreground: oklch(0.32 0.015 250); /* #383a42 */
+  --color-card: oklch(0.95 0.008 250);       /* #f0f0f0 */
+  --color-card-foreground: oklch(0.32 0.015 250);
+  --color-popover: oklch(0.98 0.005 250);
+  --color-popover-foreground: oklch(0.32 0.015 250);
+  --color-primary: oklch(0.58 0.18 255);     /* #4078f2 blue */
+  --color-primary-foreground: oklch(1.0000 0 0);
+  --color-secondary: oklch(0.92 0.01 250);
+  --color-secondary-foreground: oklch(0.32 0.015 250);
+  --color-muted: oklch(0.93 0.008 250);
+  --color-muted-foreground: oklch(0.58 0.015 250); /* #a0a1a7 */
+  --color-accent: oklch(0.92 0.02 255);
+  --color-accent-foreground: oklch(0.50 0.18 255);
+  --color-destructive: oklch(0.60 0.22 25);        /* #e45649 */
+  --color-destructive-foreground: oklch(1.0000 0 0);
+  --color-border: oklch(0.88 0.01 250);
+  --color-input: oklch(0.92 0.01 250);
+  --color-ring: oklch(0.58 0.18 255);
+
+  --color-sidebar: oklch(0.96 0.008 250);
+  --color-sidebar-foreground: oklch(0.32 0.015 250);
+  --color-sidebar-primary: oklch(0.58 0.18 255);
+  --color-sidebar-primary-foreground: oklch(1.0000 0 0);
+  --color-sidebar-accent: oklch(0.92 0.02 255);
+  --color-sidebar-accent-foreground: oklch(0.50 0.18 255);
+  --color-sidebar-border: oklch(0.88 0.01 250);
+  --color-sidebar-ring: oklch(0.58 0.18 255);
+
+  --color-chart-1: oklch(0.58 0.18 255); /* blue */
+  --color-chart-2: oklch(0.62 0.16 145); /* green */
+  --color-chart-3: oklch(0.68 0.16 75);  /* orange */
+  --color-chart-4: oklch(0.55 0.20 315); /* purple */
+  --color-chart-5: oklch(0.60 0.22 25);  /* red */
+
+  /* highlight.js token */
+  --hljs-bg: oklch(0.95 0.008 250);
+  --hljs-fg: oklch(0.32 0.015 250);
+  --hljs-comment: oklch(0.60 0.015 250);
+  --hljs-keyword: oklch(0.55 0.20 315); /* purple #a626a4 */
+  --hljs-string: oklch(0.62 0.16 145);  /* green #50a14f */
+  --hljs-number: oklch(0.65 0.18 45);   /* orange #986801 */
+  --hljs-title: oklch(0.58 0.18 255);   /* blue */
+  --hljs-attr: oklch(0.60 0.22 25);     /* red */
+  --hljs-built_in: oklch(0.62 0.15 200);
+
+  /* monaco token */
+  --monaco-bg: oklch(0.98 0.005 250);
+  --monaco-fg: oklch(0.32 0.015 250);
+  --monaco-line-number: oklch(0.65 0.015 250);
+  --monaco-line-number-active: oklch(0.32 0.015 250);
+  --monaco-line-highlight: oklch(0.94 0.01 250);
+  --monaco-selection: oklch(0.88 0.03 255);
+  --monaco-widget-bg: oklch(0.95 0.008 250);
+  --monaco-widget-border: oklch(0.88 0.01 250);
+  --monaco-gutter-bg: oklch(0.98 0.005 250);
+  --monaco-scroll-thumb: oklch(0.85 0.01 250);
+
+  --mermaid-theme: default;
+}
+
+/* ─── One Dark Pro ─── */
+[data-style="one-dark"].dark {
+  --color-background: oklch(0.24 0.015 250); /* #282c34 */
+  --color-foreground: oklch(0.78 0.02 250);  /* #abb2bf */
+  --color-card: oklch(0.28 0.018 250);       /* #2c313a */
+  --color-card-foreground: oklch(0.78 0.02 250);
+  --color-popover: oklch(0.24 0.015 250);
+  --color-popover-foreground: oklch(0.78 0.02 250);
+  --color-primary: oklch(0.72 0.14 240);     /* #61afef blue */
+  --color-primary-foreground: oklch(0.18 0.015 250);
+  --color-secondary: oklch(0.32 0.02 250);
+  --color-secondary-foreground: oklch(0.78 0.02 250);
+  --color-muted: oklch(0.29 0.018 250);
+  --color-muted-foreground: oklch(0.55 0.02 250); /* #5c6370 */
+  --color-accent: oklch(0.34 0.03 245);
+  --color-accent-foreground: oklch(0.82 0.12 240);
+  --color-destructive: oklch(0.65 0.20 20);       /* #e06c75 red */
+  --color-destructive-foreground: oklch(1.0000 0 0);
+  --color-border: oklch(0.35 0.02 250);
+  --color-input: oklch(0.30 0.02 250);
+  --color-ring: oklch(0.72 0.14 240);
+
+  --color-sidebar: oklch(0.22 0.015 250);    /* #21252b */
+  --color-sidebar-foreground: oklch(0.78 0.02 250);
+  --color-sidebar-primary: oklch(0.72 0.14 240);
+  --color-sidebar-primary-foreground: oklch(0.18 0.015 250);
+  --color-sidebar-accent: oklch(0.34 0.03 245);
+  --color-sidebar-accent-foreground: oklch(0.82 0.12 240);
+  --color-sidebar-border: oklch(0.32 0.02 250);
+  --color-sidebar-ring: oklch(0.72 0.14 240);
+
+  --color-chart-1: oklch(0.72 0.14 240); /* blue #61afef */
+  --color-chart-2: oklch(0.76 0.14 140); /* green #98c379 */
+  --color-chart-3: oklch(0.80 0.14 85);  /* yellow #e5c07b */
+  --color-chart-4: oklch(0.70 0.16 315); /* purple #c678dd */
+  --color-chart-5: oklch(0.65 0.20 20);  /* red #e06c75 */
+
+  /* highlight.js token */
+  --hljs-bg: oklch(0.21 0.015 250);
+  --hljs-fg: oklch(0.78 0.02 250);
+  --hljs-comment: oklch(0.50 0.02 250);
+  --hljs-keyword: oklch(0.70 0.16 315); /* #c678dd */
+  --hljs-string: oklch(0.76 0.14 140);  /* #98c379 */
+  --hljs-number: oklch(0.74 0.16 50);   /* #d19a66 */
+  --hljs-title: oklch(0.72 0.14 240);   /* #61afef */
+  --hljs-attr: oklch(0.65 0.20 20);     /* #e06c75 */
+  --hljs-built_in: oklch(0.75 0.14 200);
+
+  /* monaco token */
+  --monaco-bg: oklch(0.24 0.015 250);
+  --monaco-fg: oklch(0.78 0.02 250);
+  --monaco-line-number: oklch(0.48 0.02 250);
+  --monaco-line-number-active: oklch(0.78 0.02 250);
+  --monaco-line-highlight: oklch(0.27 0.018 250);
+  --monaco-selection: oklch(0.35 0.03 245);
+  --monaco-widget-bg: oklch(0.28 0.018 250);
+  --monaco-widget-border: oklch(0.35 0.02 250);
+  --monaco-gutter-bg: oklch(0.24 0.015 250);
+  --monaco-scroll-thumb: oklch(0.36 0.02 250);
+
+  --mermaid-theme: dark;
+}

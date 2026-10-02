@@ -21,80 +21,29 @@ import { createModuleWorker } from "@/lib/cleanWorker";
     ? `${self.location.origin}/`
     : "/";
 
-/** 与 index.css 的 .dark / :root 令牌一一对应（oklch → hex） */
-const TOKENS = {
-  light: {
-    background: "#ffffff", // --color-background
-    foreground: "#0f1419", // --color-foreground
-    card: "#f7f8f8", // --color-card
-    muted: "#e5e5e6", // --color-muted
-    accent: "#e3ecf6", // --color-accent
-    border: "#e1eaef", // --color-border
-    lineNumbers: "#8b95a1", // foreground/border 之间的中间灰，保证可读
-  },
-  dark: {
-    background: "#000000", // --color-background
-    foreground: "#e7e9ea", // --color-foreground
-    card: "#17181c", // --color-card
-    muted: "#181818", // --color-muted
-    accent: "#061622", // --color-accent
-    border: "#242628", // --color-border
-    lineNumbers: "#6f7680", // muted-foreground(#72767a) 略调
-  },
-} as const;
+import { setMonacoInstance, syncMonacoThemeDynamic } from "@/lib/theme/themeBridge";
+import { registerCustomLanguages } from "@/lib/languages/registerCustomLanguages";
 
-function themeColors(dark: boolean): Record<string, string> {
-  const t = dark ? TOKENS.dark : TOKENS.light;
-  return {
-    "editor.background": t.background,
-    "editor.foreground": t.foreground,
-    "editorLineNumber.foreground": t.lineNumbers,
-    "editorLineNumber.activeForeground": t.foreground,
-    "editor.lineHighlightBackground": t.accent,
-    "editor.selectionBackground": t.accent,
-    "editorWidget.background": t.card,
-    "editorWidget.border": t.border,
-    "editorGutter.background": t.background,
-    "scrollbarSlider.background": t.muted,
-    "minimap.background": t.background,
-  };
+setMonacoInstance(monaco);
+if (typeof window !== "undefined") {
+  (window as unknown as { monaco?: typeof monaco }).monaco = monaco;
 }
 
 function defineThemes(): void {
-  try {
-    monaco.editor.defineTheme("docforge-light", {
-      base: "vs",
-      inherit: true,
-      rules: [],
-      colors: themeColors(false),
-    });
-    monaco.editor.defineTheme("docforge-dark", {
-      base: "vs-dark",
-      inherit: true,
-      rules: [],
-      colors: themeColors(true),
-    });
-  } catch (e) {
-    // 主题注册异常不应导致编辑器崩溃：退回 Monaco 内置主题
-    console.warn("[DocForge] Monaco 主题定义失败，使用内置主题：", e);
-  }
+  // 初始预热 light 与 dark 两种状态的主题注册
+  syncMonacoThemeDynamic(false, monaco);
+  syncMonacoThemeDynamic(true, monaco);
 }
 
 /**
  * 切换 Monaco 主题。
  * 必须显式传入 dark：next-themes 是在父组件（ThemeProvider）的 effect 里
  * 把 .dark 写进 DOM 的，而子组件 EditorPane 的 effect 先执行——若在此处
- * 读取 class，拿到的永远是上一次的旧主题，导致编辑器与界面颜色相反。
- * 仅在未传参时（如首帧 resolvedTheme 尚未就绪）才回退到读 DOM。
+ * 读取 class，拿到的可能是旧值。
+ * 动态桥接器会结合 DOM 上的 data-style 与传入的 dark 计算出准确的 hex 主题。
  */
 export function syncMonacoTheme(dark?: boolean): void {
-  const isDark =
-    dark ?? document.documentElement.classList.contains("dark");
-  try {
-    monaco.editor.setTheme(isDark ? "docforge-dark" : "docforge-light");
-  } catch {
-    monaco.editor.setTheme(isDark ? "vs-dark" : "vs");
-  }
+  syncMonacoThemeDynamic(dark);
 }
 
 let configured = false;
@@ -102,6 +51,7 @@ let configured = false;
 function configureEnv(): void {
   if (configured) return;
   configured = true;
+  registerCustomLanguages(monaco);
   (self as unknown as { MonacoEnvironment: unknown }).MonacoEnvironment = {
     getWorker(): Worker {
       return createModuleWorker(editorWorkerUrl);

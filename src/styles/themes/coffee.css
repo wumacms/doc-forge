@@ -1,0 +1,131 @@
+/* Coffee 醇香咖啡主题 (Light: 拿铁暖白 / Dark: 浓缩浓咖) */
+
+/* ─── Coffee Light (Latte 丝滑拿铁) ─── */
+[data-style="coffee"] {
+  --font-sans: 'Charter', 'Palatino', 'Optima', 'Avenir Next', 'PingFang SC', sans-serif;
+  --font-serif: 'Charter', 'Palatino', 'Georgia', serif;
+  --font-mono: 'Courier New', 'Courier Prime', monospace;
+
+  --color-background: oklch(0.965 0.015 75);  /* 奶泡暖白 #faf6ef */
+  --color-foreground: oklch(0.32 0.035 55);   /* 深烘咖啡棕 #3e2d23 */
+  --color-card: oklch(0.93 0.018 75);         /* 燕麦拿铁底色 #eee4d5 */
+  --color-card-foreground: oklch(0.32 0.035 55);
+  --color-popover: oklch(0.965 0.015 75);
+  --color-popover-foreground: oklch(0.32 0.035 55);
+  --color-primary: oklch(0.55 0.16 60);       /* 焦糖琥珀 #9c5821 */
+  --color-primary-foreground: oklch(1.0000 0 0);
+  --color-secondary: oklch(0.90 0.02 75);     /* 浅奶咖色 */
+  --color-secondary-foreground: oklch(0.32 0.035 55);
+  --color-muted: oklch(0.91 0.015 75);
+  --color-muted-foreground: oklch(0.55 0.025 60); /* 浅焙豆灰棕 #786657 */
+  --color-accent: oklch(0.88 0.03 70);        /* 浅焦糖高亮 */
+  --color-accent-foreground: oklch(0.48 0.15 55);
+  --color-destructive: oklch(0.58 0.22 25);
+  --color-destructive-foreground: oklch(1.0000 0 0);
+  --color-border: oklch(0.86 0.02 75);        /* 柔和奶啡边框 */
+  --color-input: oklch(0.90 0.018 75);
+  --color-ring: oklch(0.55 0.16 60);
+
+  --color-sidebar: oklch(0.94 0.016 75);
+  --color-sidebar-foreground: oklch(0.32 0.035 55);
+  --color-sidebar-primary: oklch(0.55 0.16 60);
+  --color-sidebar-primary-foreground: oklch(1.0000 0 0);
+  --color-sidebar-accent: oklch(0.88 0.03 70);
+  --color-sidebar-accent-foreground: oklch(0.48 0.15 55);
+  --color-sidebar-border: oklch(0.86 0.02 75);
+  --color-sidebar-ring: oklch(0.55 0.16 60);
+
+  --color-chart-1: oklch(0.55 0.16 60);  /* 焦糖棕 */
+  --color-chart-2: oklch(0.60 0.14 135); /* 抹茶绿 */
+  --color-chart-3: oklch(0.65 0.17 75);  /* 肉桂橙 */
+  --color-chart-4: oklch(0.52 0.15 25);  /* 摩卡红 */
+  --color-chart-5: oklch(0.58 0.12 240); /* 浅灰蓝 */
+
+  /* highlight.js token */
+  --hljs-bg: oklch(0.93 0.018 75);
+  --hljs-fg: oklch(0.32 0.035 55);
+  --hljs-comment: oklch(0.62 0.025 60);
+  --hljs-keyword: oklch(0.52 0.18 50);  /* 烘焙暖棕 */
+  --hljs-string: oklch(0.58 0.14 135);  /* 抹茶茶香 */
+  --hljs-number: oklch(0.60 0.16 75);   /* 琥珀焦糖 */
+  --hljs-title: oklch(0.50 0.15 35);    /* 浓可可红 */
+  --hljs-attr: oklch(0.55 0.16 60);     /* 焦糖色 */
+  --hljs-built_in: oklch(0.58 0.12 240);
+
+  /* monaco token */
+  --monaco-bg: oklch(0.965 0.015 75);
+  --monaco-fg: oklch(0.32 0.035 55);
+  --monaco-line-number: oklch(0.65 0.025 60);
+  --monaco-line-number-active: oklch(0.32 0.035 55);
+  --monaco-line-highlight: oklch(0.92 0.02 75);
+  --monaco-selection: oklch(0.86 0.04 70);
+  --monaco-widget-bg: oklch(0.93 0.018 75);
+  --monaco-widget-border: oklch(0.86 0.02 75);
+  --monaco-gutter-bg: oklch(0.965 0.015 75);
+  --monaco-scroll-thumb: oklch(0.84 0.02 75);
+
+  --mermaid-theme: default;
+}
+
+/* ─── Coffee Dark (Espresso 意式浓缩) ─── */
+[data-style="coffee"].dark {
+  --color-background: oklch(0.20 0.025 55);  /* 浓缩咖啡黑褐 #201813 */
+  --color-foreground: oklch(0.90 0.015 75);  /* 奶泡暖白 #eee5d8 */
+  --color-card: oklch(0.25 0.03 55);         /* 炭焙摩卡 #2a201a */
+  --color-card-foreground: oklch(0.90 0.015 75);
+  --color-popover: oklch(0.20 0.025 55);
+  --color-popover-foreground: oklch(0.90 0.015 75);
+  --color-primary: oklch(0.74 0.14 65);      /* 金色油脂 Crema #d6944e */
+  --color-primary-foreground: oklch(0.18 0.025 55);
+  --color-secondary: oklch(0.30 0.03 55);
+  --color-secondary-foreground: oklch(0.90 0.015 75);
+  --color-muted: oklch(0.26 0.025 55);
+  --color-muted-foreground: oklch(0.65 0.025 65); /* 浅咖啡粉 #998372 */
+  --color-accent: oklch(0.32 0.04 60);       /* 烤榛果强调色 */
+  --color-accent-foreground: oklch(0.84 0.12 65);
+  --color-destructive: oklch(0.65 0.20 25);
+  --color-destructive-foreground: oklch(1.0000 0 0);
+  --color-border: oklch(0.34 0.03 55);       /* 暗褐边框 */
+  --color-input: oklch(0.28 0.03 55);
+  --color-ring: oklch(0.74 0.14 65);
+
+  --color-sidebar: oklch(0.17 0.025 55);     /* 最深底黑炭焙色 #19130f */
+  --color-sidebar-foreground: oklch(0.90 0.015 75);
+  --color-sidebar-primary: oklch(0.74 0.14 65);
+  --color-sidebar-primary-foreground: oklch(0.18 0.025 55);
+  --color-sidebar-accent: oklch(0.32 0.04 60);
+  --color-sidebar-accent-foreground: oklch(0.84 0.12 65);
+  --color-sidebar-border: oklch(0.30 0.03 55);
+  --color-sidebar-ring: oklch(0.74 0.14 65);
+
+  --color-chart-1: oklch(0.74 0.14 65);  /* 金色 Crema */
+  --color-chart-2: oklch(0.78 0.13 140); /* 抹茶淡绿 */
+  --color-chart-3: oklch(0.80 0.14 80);  /* 焦糖布丁 */
+  --color-chart-4: oklch(0.72 0.16 35);  /* 红丝绒 */
+  --color-chart-5: oklch(0.74 0.12 230); /* 瓷蓝杯色 */
+
+  /* highlight.js token */
+  --hljs-bg: oklch(0.17 0.025 55);
+  --hljs-fg: oklch(0.90 0.015 75);
+  --hljs-comment: oklch(0.55 0.025 60);
+  --hljs-keyword: oklch(0.76 0.14 65);  /* 烘焙焦糖 */
+  --hljs-string: oklch(0.78 0.13 140);  /* 抹茶绿 */
+  --hljs-number: oklch(0.80 0.14 80);   /* 肉桂暖黄 */
+  --hljs-title: oklch(0.78 0.12 40);    /* 枫糖暖红 */
+  --hljs-attr: oklch(0.74 0.14 65);     /* 金色 */
+  --hljs-built_in: oklch(0.74 0.12 230);
+
+  /* monaco token */
+  --monaco-bg: oklch(0.20 0.025 55);
+  --monaco-fg: oklch(0.90 0.015 75);
+  --monaco-line-number: oklch(0.52 0.025 60);
+  --monaco-line-number-active: oklch(0.90 0.015 75);
+  --monaco-line-highlight: oklch(0.25 0.03 55);
+  --monaco-selection: oklch(0.35 0.04 60);
+  --monaco-widget-bg: oklch(0.25 0.03 55);
+  --monaco-widget-border: oklch(0.34 0.03 55);
+  --monaco-gutter-bg: oklch(0.20 0.025 55);
+  --monaco-scroll-thumb: oklch(0.35 0.03 55);
+
+  --mermaid-theme: dark;
+}

@@ -21,6 +21,7 @@ const HLJS_ALIAS: Record<string, string> = {
   dockerfile: "dockerfile",
   graphql: "graphql",
   restructuredtext: "python-repl",
+  vue: "xml",
   plaintext: "",
 };
 

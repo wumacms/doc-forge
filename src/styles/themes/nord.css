@@ -1,0 +1,131 @@
+/* Nord 极光主题风格定义 (Light & Dark) */
+
+/* ─── Nord Light (Snow Storm) ─── */
+[data-style="nord"] {
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-serif: 'Georgia', serif;
+  --font-mono: 'Menlo', 'Monaco', 'Fira Code', monospace;
+
+  --color-background: oklch(0.96 0.01 230); /* nord6 */
+  --color-foreground: oklch(0.32 0.03 235); /* nord0 */
+  --color-card: oklch(0.93 0.012 230); /* nord5 */
+  --color-card-foreground: oklch(0.32 0.03 235);
+  --color-popover: oklch(0.96 0.01 230);
+  --color-popover-foreground: oklch(0.32 0.03 235);
+  --color-primary: oklch(0.58 0.12 230); /* nord10 frost */
+  --color-primary-foreground: oklch(1.0000 0 0);
+  --color-secondary: oklch(0.90 0.015 230); /* nord4 */
+  --color-secondary-foreground: oklch(0.32 0.03 235);
+  --color-muted: oklch(0.90 0.015 230);
+  --color-muted-foreground: oklch(0.52 0.02 235); /* nord3 */
+  --color-accent: oklch(0.88 0.03 230);
+  --color-accent-foreground: oklch(0.50 0.13 230);
+  --color-destructive: oklch(0.60 0.18 25); /* nord11 aurora red */
+  --color-destructive-foreground: oklch(1.0000 0 0);
+  --color-border: oklch(0.86 0.02 230);
+  --color-input: oklch(0.90 0.015 230);
+  --color-ring: oklch(0.58 0.12 230);
+
+  --color-sidebar: oklch(0.94 0.012 230);
+  --color-sidebar-foreground: oklch(0.32 0.03 235);
+  --color-sidebar-primary: oklch(0.58 0.12 230);
+  --color-sidebar-primary-foreground: oklch(1.0000 0 0);
+  --color-sidebar-accent: oklch(0.88 0.03 230);
+  --color-sidebar-accent-foreground: oklch(0.50 0.13 230);
+  --color-sidebar-border: oklch(0.86 0.02 230);
+  --color-sidebar-ring: oklch(0.58 0.12 230);
+
+  --color-chart-1: oklch(0.58 0.12 230); /* nord10 */
+  --color-chart-2: oklch(0.68 0.12 155); /* nord14 green */
+  --color-chart-3: oklch(0.75 0.13 85);  /* nord13 yellow */
+  --color-chart-4: oklch(0.65 0.15 310); /* nord15 purple */
+  --color-chart-5: oklch(0.65 0.14 45);  /* nord12 orange */
+
+  /* highlight.js token */
+  --hljs-bg: oklch(0.93 0.012 230);
+  --hljs-fg: oklch(0.32 0.03 235);
+  --hljs-comment: oklch(0.60 0.02 235);
+  --hljs-keyword: oklch(0.58 0.12 230);
+  --hljs-string: oklch(0.60 0.13 150);
+  --hljs-number: oklch(0.62 0.14 310);
+  --hljs-title: oklch(0.55 0.13 210);
+  --hljs-attr: oklch(0.58 0.12 230);
+  --hljs-built_in: oklch(0.65 0.11 200);
+
+  /* monaco token */
+  --monaco-bg: oklch(0.96 0.01 230);
+  --monaco-fg: oklch(0.32 0.03 235);
+  --monaco-line-number: oklch(0.65 0.02 235);
+  --monaco-line-number-active: oklch(0.32 0.03 235);
+  --monaco-line-highlight: oklch(0.92 0.015 230);
+  --monaco-selection: oklch(0.85 0.04 230);
+  --monaco-widget-bg: oklch(0.93 0.012 230);
+  --monaco-widget-border: oklch(0.86 0.02 230);
+  --monaco-gutter-bg: oklch(0.96 0.01 230);
+  --monaco-scroll-thumb: oklch(0.85 0.02 230);
+
+  --mermaid-theme: default;
+}
+
+/* ─── Nord Dark (Polar Night) ─── */
+[data-style="nord"].dark {
+  --color-background: oklch(0.24 0.025 240); /* nord0 */
+  --color-foreground: oklch(0.94 0.01 230);  /* nord6 */
+  --color-card: oklch(0.28 0.025 240);       /* nord1 */
+  --color-card-foreground: oklch(0.94 0.01 230);
+  --color-popover: oklch(0.24 0.025 240);
+  --color-popover-foreground: oklch(0.94 0.01 230);
+  --color-primary: oklch(0.76 0.11 215);     /* nord8 frost cyan */
+  --color-primary-foreground: oklch(0.24 0.025 240);
+  --color-secondary: oklch(0.34 0.025 240);   /* nord2 */
+  --color-secondary-foreground: oklch(0.94 0.01 230);
+  --color-muted: oklch(0.30 0.025 240);
+  --color-muted-foreground: oklch(0.68 0.02 235); /* nord4 */
+  --color-accent: oklch(0.35 0.03 235);      /* nord3 */
+  --color-accent-foreground: oklch(0.80 0.10 215);
+  --color-destructive: oklch(0.65 0.18 25);  /* nord11 */
+  --color-destructive-foreground: oklch(1.0000 0 0);
+  --color-border: oklch(0.38 0.025 240);
+  --color-input: oklch(0.32 0.025 240);
+  --color-ring: oklch(0.76 0.11 215);
+
+  --color-sidebar: oklch(0.26 0.025 240);
+  --color-sidebar-foreground: oklch(0.94 0.01 230);
+  --color-sidebar-primary: oklch(0.76 0.11 215);
+  --color-sidebar-primary-foreground: oklch(0.24 0.025 240);
+  --color-sidebar-accent: oklch(0.35 0.03 235);
+  --color-sidebar-accent-foreground: oklch(0.80 0.10 215);
+  --color-sidebar-border: oklch(0.38 0.025 240);
+  --color-sidebar-ring: oklch(0.76 0.11 215);
+
+  --color-chart-1: oklch(0.76 0.11 215); /* nord8 */
+  --color-chart-2: oklch(0.78 0.13 150); /* nord14 */
+  --color-chart-3: oklch(0.82 0.12 85);  /* nord13 */
+  --color-chart-4: oklch(0.75 0.13 310); /* nord15 */
+  --color-chart-5: oklch(0.74 0.14 45);  /* nord12 */
+
+  /* highlight.js token */
+  --hljs-bg: oklch(0.21 0.025 240);
+  --hljs-fg: oklch(0.94 0.01 230);
+  --hljs-comment: oklch(0.55 0.02 235);
+  --hljs-keyword: oklch(0.72 0.12 230);
+  --hljs-string: oklch(0.78 0.13 150);
+  --hljs-number: oklch(0.75 0.13 310);
+  --hljs-title: oklch(0.80 0.10 215);
+  --hljs-attr: oklch(0.76 0.11 215);
+  --hljs-built_in: oklch(0.75 0.10 200);
+
+  /* monaco token */
+  --monaco-bg: oklch(0.24 0.025 240);
+  --monaco-fg: oklch(0.94 0.01 230);
+  --monaco-line-number: oklch(0.50 0.02 235);
+  --monaco-line-number-active: oklch(0.94 0.01 230);
+  --monaco-line-highlight: oklch(0.29 0.025 240);
+  --monaco-selection: oklch(0.38 0.04 235);
+  --monaco-widget-bg: oklch(0.28 0.025 240);
+  --monaco-widget-border: oklch(0.38 0.025 240);
+  --monaco-gutter-bg: oklch(0.24 0.025 240);
+  --monaco-scroll-thumb: oklch(0.36 0.025 240);
+
+  --mermaid-theme: dark;
+}
