@@ -68,6 +68,24 @@ export async function kvGet<T>(key: string): Promise<T | null> {
   }
 }
 
+/* ---------- 轻量偏好：体量小、需同步读取，直接走 localStorage ---------- */
+
+export function getPref(key: string): string | null {
+  try {
+    return localStorage.getItem(key);
+  } catch {
+    return null;
+  }
+}
+
+export function setPref(key: string, value: string): void {
+  try {
+    localStorage.setItem(key, value);
+  } catch {
+    // 隐私模式 / 配额满等场景静默忽略
+  }
+}
+
 /** 写入工作区数据；IDB 失败时回退 localStorage */
 export async function kvSet(key: string, value: unknown): Promise<void> {
   try {

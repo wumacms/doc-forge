@@ -45,7 +45,17 @@ import {
   updateFile,
 } from "@/lib/workspace";
 import { setupMonaco } from "@/lib/monacoSetup";
+import { getPref, setPref } from "@/lib/storage";
 import { cn } from "@/lib/utils";
+
+const VIEW_MODE_KEY = "docforge:view-mode";
+const VIEW_MODES: ViewMode[] = ["edit", "split", "preview"];
+
+/** 视图模式属于用户偏好：同步从 localStorage 恢复，非法值回退分屏 */
+function initialViewMode(): ViewMode {
+  const saved = getPref(VIEW_MODE_KEY);
+  return VIEW_MODES.includes(saved as ViewMode) ? (saved as ViewMode) : "split";
+}
 
 // 提前注册 MonacoEnvironment，避免首次创建编辑器时才配置的竞态
 setupMonaco();
@@ -99,7 +109,7 @@ export default function App() {
   const [nodes, setNodes] = useState<WsNode[]>([]);
   const [loaded, setLoaded] = useState(false);
   const [activeId, setActiveId] = useState<string | null>(null);
-  const [mode, setMode] = useState<ViewMode>("split");
+  const [mode, setMode] = useState<ViewMode>(initialViewMode);
   const [pendingDelete, setPendingDelete] = useState<WsNode | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const folderInputRef = useRef<HTMLInputElement>(null);
@@ -194,6 +204,11 @@ export default function App() {
     const t = window.setTimeout(() => saveWorkspace(nodes), 400);
     return () => window.clearTimeout(t);
   }, [nodes, loaded]);
+
+  /* ---------- 持久化：视图模式（用户偏好，同步写 localStorage） ---------- */
+  useEffect(() => {
+    setPref(VIEW_MODE_KEY, mode);
+  }, [mode]);
 
   /* ---------- 批量导入 ---------- */
   const importFrom = useCallback(
