@@ -9,8 +9,20 @@ import fs from "fs";
 const hasEsaConfig = fs.existsSync(path.resolve(__dirname, "esa.jsonc"));
 
 // https://vitejs.dev/config/
-export default defineConfig(({ mode }) => ({
-  server: {
+export default defineConfig(({ mode }) => {
+  const repoName = process.env.GITHUB_REPOSITORY
+    ? `/${process.env.GITHUB_REPOSITORY.split("/")[1]}/`
+    : "/doc-forge/";
+
+  let base =
+    process.env.BASE_URL ?? (process.env.GITHUB_ACTIONS ? repoName : "/");
+  if (!base.endsWith("/")) {
+    base += "/";
+  }
+
+  return {
+    base,
+    server: {
     host: "::",
     port: 5173,
     hmr: {
@@ -38,4 +50,5 @@ export default defineConfig(({ mode }) => ({
       "@": path.resolve(__dirname, "./src"),
     },
   },
-}));
+  };
+});
