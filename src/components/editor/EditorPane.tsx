@@ -2,10 +2,10 @@ import { useEffect, useRef } from "react";
 import { useTheme } from "next-themes";
 import { monaco, syncMonacoTheme } from "@/lib/monacoSetup";
 import { resolveParser } from "@/lib/parsers/registry";
-import type { DocFile } from "@/types";
+import type { WsFile } from "@/types";
 
 interface Props {
-  file: DocFile;
+  file: WsFile;
   onChange: (content: string) => void;
 }
 

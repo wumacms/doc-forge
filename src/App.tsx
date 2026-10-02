@@ -1,19 +1,51 @@
-import { useCallback, useEffect, useMemo, useState } from "react";
-import { PenLine, Columns2, Eye, Hammer, Sun, Moon } from "lucide-react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import {
+  PenLine,
+  Columns2,
+  Eye,
+  Hammer,
+  Sun,
+  Moon,
+  Upload,
+  FolderUp,
+} from "lucide-react";
 import { useTheme } from "next-themes";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 import { Toaster } from "@/components/ui/toaster";
 import { toast } from "@/hooks/use-toast";
 import FileTree from "@/components/FileTree";
 import EditorPane, { disposeModel } from "@/components/editor/EditorPane";
 import PreviewPane from "@/components/PreviewPane";
-import { type DocFile } from "@/types";
+import type { ViewMode, WsFile, WsFolder, WsNode } from "@/types";
 import { resolveParser } from "@/lib/parsers/registry";
 import "@/lib/parsers"; // 副作用：注册全部文档解析器
-import { loadWorkspace, saveWorkspace, uid } from "@/lib/workspace";
+import {
+  collectFileIds,
+  countFiles,
+  findNode,
+  insertChild,
+  loadWorkspace,
+  mergeByPaths,
+  readImportedFiles,
+  removeNode,
+  renameNode,
+  saveWorkspace,
+  supportedExtensions,
+  uid,
+  uniqueName,
+  updateFile,
+} from "@/lib/workspace";
 import { setupMonaco } from "@/lib/monacoSetup";
 import { cn } from "@/lib/utils";
-
-type ViewMode = "edit" | "split" | "preview";
 
 // 提前注册 MonacoEnvironment，避免首次创建编辑器时才配置的竞态
 setupMonaco();
@@ -44,7 +76,7 @@ function ThemeToggle() {
         const idx = THEME_ORDER.indexOf(current);
         setTheme(THEME_ORDER[(idx + 1) % THEME_ORDER.length]);
       }}
-      className=" border border-border bg-background p-2 text-muted-foreground transition-colors hover:bg-accent hover:text-accent-foreground"
+      className="border border-border bg-background p-2 text-muted-foreground transition-colors hover:bg-accent hover:text-accent-foreground"
     >
       {/* SSR/水合前固定图标，避免闪烁 */}
       <Icon className="h-4 w-4" aria-hidden />
@@ -53,68 +85,54 @@ function ThemeToggle() {
   );
 }
 
+/** 深度优先找到第一个文件节点（初始选中用） */
+function firstFile(nodes: WsNode[]): WsFile | null {
+  for (const n of nodes) {
+    if (n.kind === "file") return n;
+    const hit = firstFile(n.children);
+    if (hit) return hit;
+  }
+  return null;
+}
+
 export default function App() {
-  const [initial] = useState(loadWorkspace);
-  const [files, setFiles] = useState<DocFile[]>(initial);
-  const [activeId, setActiveId] = useState<string | null>(
-    initial[0]?.id ?? null,
-  );
+  const [nodes, setNodes] = useState<WsNode[]>([]);
+  const [loaded, setLoaded] = useState(false);
+  const [activeId, setActiveId] = useState<string | null>(null);
   const [mode, setMode] = useState<ViewMode>("split");
+  const [pendingDelete, setPendingDelete] = useState<WsNode | null>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const folderInputRef = useRef<HTMLInputElement>(null);
+  const [dragOver, setDragOver] = useState(false);
 
-  // 持久化（去抖）
+  /* ---------- 加载持久化数据 ---------- */
   useEffect(() => {
-    const t = setTimeout(() => saveWorkspace(files), 300);
-    return () => clearTimeout(t);
-  }, [files]);
-
-  const activeFile = useMemo(
-    () => files.find((f) => f.id === activeId) ?? null,
-    [files, activeId],
-  );
-
-  // 按文件类型解析对应解析器：驱动编辑权限、顶栏标签与预览分发
-  const parser = useMemo(
-    () => (activeFile ? resolveParser(activeFile.name) : null),
-    [activeFile],
-  );
-  const editable = parser?.editable ?? true;
-  const isPreviewOnly = !!parser && !parser.editable;
-
-  // 打开不可编辑文件（如 PDF）时强制进入预览视图
-  useEffect(() => {
-    if (isPreviewOnly) setMode("preview");
-  }, [isPreviewOnly]);
-
-  const handleChange = useCallback(
-    (content: string) => {
-      setFiles((prev) =>
-        prev.map((f) => (f.id === activeId ? { ...f, content } : f)),
-      );
-    },
-    [activeId],
-  );
-
-  const handleCreate = (name: string) => {
-    const file: DocFile = { id: uid(), name, content: "" };
-    setFiles((prev) => [...prev, file]);
-    setActiveId(file.id);
-    toast({ title: "已创建", description: name });
-  };
-
-  const handleRename = (id: string, name: string) => {
-    setFiles((prev) => prev.map((f) => (f.id === id ? { ...f, name } : f)));
-  };
-
-  const handleDelete = (id: string) => {
-    const target = files.find((f) => f.id === id);
-    setFiles((prev) => {
-      const next = prev.filter((f) => f.id !== id);
-      if (activeId === id) setActiveId(next[0]?.id ?? null);
-      return next;
+    let cancelled = false;
+    loadWorkspace().then((data) => {
+      if (cancelled) return;
+      setNodes(data);
+      setActiveId(firstFile(data)?.id ?? null);
+      setLoaded(true);
     });
-    disposeModel(id);
-    if (target) toast({ title: "已删除", description: target.name });
-  };
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  /* ---------- 派生：当前文件 / 所在文件夹 / 解析器 ---------- */
+  const active = useMemo(
+    () =>
+      activeId && findNode(nodes, activeId)?.node.kind === "file"
+        ? (findNode(nodes, activeId)!.node as WsFile)
+        : null,
+    [nodes, activeId],
+  );
+  const parser = useMemo(
+    () => (active ? resolveParser(active.name) : null),
+    [active],
+  );
+  const editable = parser?.editable ?? false;
+  const effectiveMode: ViewMode = editable ? mode : "preview";
 
   const modes: { key: ViewMode; label: string; icon: typeof PenLine }[] = [
     { key: "edit", label: "编辑", icon: PenLine },
@@ -122,6 +140,146 @@ export default function App() {
     { key: "preview", label: "预览", icon: Eye },
   ];
 
+  /* ---------- 树操作 ---------- */
+  const siblingsOf = useCallback(
+    (parentId: string | null): WsNode[] =>
+      parentId ? (findNode(nodes, parentId)?.node as WsFolder)?.children ?? [] : nodes,
+    [nodes],
+  );
+
+  const handleCreateFile = (parentId: string | null, name: string) => {
+    const file: WsFile = {
+      id: uid(),
+      kind: "file",
+      name: uniqueName(siblingsOf(parentId), name),
+      content: "",
+    };
+    setNodes((prev) => insertChild(prev, parentId, file));
+    setActiveId(file.id);
+  };
+
+  const handleCreateFolder = (parentId: string | null, name: string) => {
+    const folder: WsFolder = {
+      id: uid(),
+      kind: "folder",
+      name: uniqueName(siblingsOf(parentId), name),
+      children: [],
+    };
+    setNodes((prev) => insertChild(prev, parentId, folder));
+  };
+
+  const handleRename = (id: string, name: string) => {
+    setNodes((prev) => renameNode(prev, id, name));
+  };
+
+  const doDelete = () => {
+    if (!pendingDelete) return;
+    const ids = collectFileIds(pendingDelete);
+    ids.forEach(disposeModel);
+    const nextNodes = removeNode(nodes, pendingDelete.id);
+    setNodes(nextNodes);
+    if (activeId && ids.includes(activeId)) {
+      setActiveId(firstFile(nextNodes)?.id ?? null);
+    }
+    toast({
+      title: `已删除「${pendingDelete.name}」`,
+      description: ids.length > 1 ? `连同 ${ids.length} 个文件` : undefined,
+    });
+    setPendingDelete(null);
+  };
+
+  /* ---------- 持久化：nodes 变化即保存（加载完成后，防抖 400ms） ---------- */
+  useEffect(() => {
+    if (!loaded) return;
+    const t = window.setTimeout(() => saveWorkspace(nodes), 400);
+    return () => window.clearTimeout(t);
+  }, [nodes, loaded]);
+
+  /* ---------- 批量导入 ---------- */
+  const importFrom = useCallback(
+    async (
+      list: FileList | File[] | { file: File; path: string }[],
+    ) => {
+      const { files, paths, skipped } = await readImportedFiles(list);
+      if (files.length === 0) {
+        toast({
+          variant: "destructive",
+          title: "没有可导入的文件",
+          description: skipped.length
+            ? `已跳过 ${skipped.length} 个不支持或超过 5MB 的文件`
+            : "所选内容为空",
+        });
+        return;
+      }
+      const items = files.map((f, i) => ({ path: paths[i], file: f }));
+      setNodes((prev) => {
+        const next = mergeByPaths(prev, items);
+        // 持久化在 nodes 变化的 effect 中统一触发
+        return next;
+      });
+      setActiveId(files[0].id);
+      toast({
+        title: `导入 ${files.length} 个文件`,
+        description: skipped.length
+          ? `跳过不支持/超大文件 ${skipped.length} 个：${skipped.slice(0, 3).join("、")}${skipped.length > 3 ? "…" : ""}`
+          : undefined,
+      });
+    },
+    [],
+  );
+
+  /** 拖拽导入：优先 webkitGetAsEntry 还原文件夹结构 */
+  const handleDrop = useCallback(
+    async (e: React.DragEvent) => {
+      e.preventDefault();
+      setDragOver(false);
+      const dt = e.dataTransfer;
+      const entries = Array.from(dt.items ?? [])
+        .map((it) => it.webkitGetAsEntry?.())
+        .filter((en): en is FileSystemEntry => !!en);
+
+      if (entries.length === 0) {
+        const files = Array.from(dt.files);
+        if (files.length) await importFrom(files.map((f) => ({ file: f, path: f.name })));
+        return;
+      }
+
+      const collected: { file: File; path: string }[] = [];
+      const walk = (entry: FileSystemEntry, prefix: string): Promise<void> =>
+        new Promise((resolve) => {
+          if (entry.isFile) {
+            (entry as FileSystemFileEntry).file(
+              (f) => {
+                collected.push({ file: f, path: prefix + f.name });
+                resolve();
+              },
+              () => resolve(),
+            );
+          } else if (entry.isDirectory) {
+            const reader = (entry as FileSystemDirectoryEntry).createReader();
+            reader.readEntries(
+              async (subs) => {
+                for (const s of subs) await walk(s, prefix + entry.name + "/");
+                resolve();
+              },
+              () => resolve(),
+            );
+          } else resolve();
+        });
+      for (const en of entries) await walk(en, "");
+
+      await importFrom(collected);
+    },
+    [importFrom],
+  );
+
+  const accept = useMemo(() => supportedExtensions(), []);
+  const totalFiles = useMemo(
+    () => nodes.reduce((s, n) => s + countFiles(n), 0),
+    [nodes],
+  );
+
+  /* ---------- 渲染 ---------- */
   return (
     <div className="flex h-screen flex-col bg-background text-foreground">
       {/* 顶栏 */}
@@ -131,49 +289,99 @@ export default function App() {
           <span className="font-serif text-lg font-semibold tracking-tight">
             DocForge
           </span>
-          {activeFile && (
+          {active && (
             <span className="ml-3 hidden truncate text-sm text-muted-foreground sm:inline">
-              {activeFile.name}
+              {active.name}
             </span>
           )}
           {parser && (
-            <span className="ml-1 hidden shrink-0  border border-border bg-background px-2 py-0.5 text-[11px] text-muted-foreground lg:inline">
+            <span className="ml-1 hidden shrink-0 border border-border bg-background px-2 py-0.5 text-[11px] text-muted-foreground lg:inline">
               {parser.label}
             </span>
           )}
         </div>
+
         <div className="flex shrink-0 items-center gap-2">
-          <div
-            role="tablist"
-            aria-label="视图模式"
-            className="flex items-center gap-1  border border-border bg-background p-1"
+          <input
+            ref={fileInputRef}
+            type="file"
+            multiple
+            accept={accept}
+            className="hidden"
+            aria-hidden
+            onChange={(e) => {
+              if (e.target.files?.length) void importFrom(e.target.files);
+              e.target.value = "";
+            }}
+          />
+          <input
+            ref={folderInputRef}
+            type="file"
+            multiple
+            className="hidden"
+            aria-hidden
+            // @ts-expect-error 非标准属性：选择整个文件夹
+            webkitdirectory=""
+            directory=""
+            onChange={(e) => {
+              if (e.target.files?.length) void importFrom(e.target.files);
+              e.target.value = "";
+            }}
+          />
+          <button
+            type="button"
+            title="导入文件"
+            aria-label="导入文件"
+            onClick={() => fileInputRef.current?.click()}
+            className="flex items-center gap-1.5 border border-border bg-background px-2.5 py-1.5 text-sm text-muted-foreground transition-colors hover:bg-accent hover:text-accent-foreground"
           >
-            {modes.map((m) => {
-              const disabled = isPreviewOnly && m.key !== "preview";
-              return (
-                <button
-                  key={m.key}
-                  type="button"
-                  role="tab"
-                  aria-selected={mode === m.key}
-                  disabled={disabled}
-                  title={disabled ? "该文件类型只读，仅支持预览" : m.label}
-                  onClick={() => setMode(m.key)}
-                  className={cn(
-                    "flex items-center gap-1.5  px-3 py-1 text-sm transition-colors",
-                    mode === m.key
-                      ? "bg-primary text-primary-foreground"
-                      : "text-muted-foreground hover:bg-accent hover:text-accent-foreground",
-                    disabled &&
-                      "cursor-not-allowed opacity-40 hover:bg-transparent",
-                  )}
-                >
-                  <m.icon className="h-4 w-4" aria-hidden />
-                  <span className="hidden md:inline">{m.label}</span>
-                </button>
-              );
-            })}
-          </div>
+            <Upload className="h-4 w-4" aria-hidden />
+            <span className="hidden md:inline">导入</span>
+          </button>
+          <button
+            type="button"
+            title="导入文件夹"
+            aria-label="导入文件夹"
+            onClick={() => folderInputRef.current?.click()}
+            className="flex items-center gap-1.5 border border-border bg-background px-2.5 py-1.5 text-sm text-muted-foreground transition-colors hover:bg-accent hover:text-accent-foreground"
+          >
+            <FolderUp className="h-4 w-4" aria-hidden />
+            <span className="hidden md:inline">导入文件夹</span>
+          </button>
+
+          {active && (
+            <div
+              role="tablist"
+              aria-label="视图模式"
+              className="flex items-center gap-1 border border-border bg-background p-1"
+            >
+              {modes.map((m) => {
+                const disabled = !editable && m.key !== "preview";
+                return (
+                  <button
+                    key={m.key}
+                    type="button"
+                    role="tab"
+                    aria-selected={effectiveMode === m.key}
+                    disabled={disabled}
+                    title={disabled ? "该文件类型只读" : m.label}
+                    onClick={() => setMode(m.key)}
+                    className={cn(
+                      "flex items-center gap-1.5 px-3 py-1 text-sm transition-colors",
+                      effectiveMode === m.key
+                        ? "bg-primary text-primary-foreground"
+                        : "text-muted-foreground hover:bg-accent",
+                      disabled && "cursor-not-allowed opacity-40 hover:bg-transparent",
+                    )}
+                  >
+                    <m.icon className="h-4 w-4" aria-hidden />
+                    <span className="hidden md:inline">{m.label}</span>
+                  </button>
+                );
+              })}
+            </div>
+          )}
+
           <ThemeToggle />
         </div>
       </header>
@@ -181,50 +389,109 @@ export default function App() {
       {/* 主体 */}
       <div className="flex min-h-0 flex-1">
         <FileTree
-          files={files}
+          nodes={nodes}
           activeId={activeId}
           onSelect={setActiveId}
-          onCreate={handleCreate}
+          onCreateFile={handleCreateFile}
+          onCreateFolder={handleCreateFolder}
           onRename={handleRename}
-          onDelete={handleDelete}
+          onRequestDelete={setPendingDelete}
         />
 
-        <main className="min-w-0 flex-1">
-          {!activeFile ? (
-            <div className="flex h-full flex-col items-center justify-center gap-2 text-muted-foreground">
-              <PenLine className="h-8 w-8" aria-hidden />
-              <p>没有打开的文件。在左侧新建一个文件开始写作。</p>
+        <main
+          className="relative min-w-0 flex-1"
+          onDragOver={(e) => {
+            e.preventDefault();
+            if (!dragOver) setDragOver(true);
+          }}
+          onDragLeave={(e) => {
+            if (e.currentTarget === e.target) setDragOver(false);
+          }}
+          onDrop={(e) => void handleDrop(e)}
+        >
+          {!loaded ? (
+            <div className="flex h-full items-center justify-center text-sm text-muted-foreground">
+              正在载入工作区…
             </div>
-          ) : isPreviewOnly ? (
-            <PreviewPane file={activeFile} />
+          ) : !active ? (
+            <div className="flex h-full flex-col items-center justify-center gap-2 text-muted-foreground">
+              <Hammer className="h-8 w-8 opacity-40" aria-hidden />
+              <p className="text-sm">
+                {totalFiles === 0
+                  ? "还没有文件：新建、导入，或把文件拖到这里"
+                  : "从左侧选择或新建一个文件"}
+              </p>
+            </div>
           ) : (
             <div className="flex h-full">
-              {(mode === "edit" || mode === "split") && editable && (
+              {(effectiveMode === "edit" || effectiveMode === "split") && editable && (
                 <div
                   className={cn(
                     "h-full min-w-0 border-r border-border",
-                    mode === "split" ? "w-1/2" : "w-full border-r-0",
+                    effectiveMode === "split" ? "w-1/2" : "w-full border-r-0",
                   )}
                 >
-                  <EditorPane file={activeFile} onChange={handleChange} />
+                  <EditorPane
+                    file={active}
+                    onChange={(content) =>
+                      setNodes((prev) => updateFile(prev, active.id, content))
+                    }
+                  />
                 </div>
               )}
-              {(mode === "preview" || mode === "split") && (
+              {(effectiveMode === "preview" || effectiveMode === "split") && (
                 <div
                   className={cn(
                     "h-full min-w-0 overflow-auto",
-                    mode === "split" ? "w-1/2" : "w-full",
+                    effectiveMode === "split" ? "w-1/2" : "w-full",
                   )}
                 >
-                  <PreviewPane file={activeFile} />
+                  <PreviewPane file={active} />
                 </div>
               )}
+            </div>
+          )}
+
+          {dragOver && (
+            <div className="pointer-events-none absolute inset-0 z-40 flex items-center justify-center border-2 border-dashed border-primary bg-background/70">
+              <p className="text-sm font-medium text-primary">
+                松开以导入支持的文档（md / json / yaml / html / pdf）
+              </p>
             </div>
           )}
         </main>
       </div>
 
+      {/* 删除确认 */}
+      <AlertDialog
+        open={pendingDelete !== null}
+        onOpenChange={(open) => !open && setPendingDelete(null)}
+      >
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>
+              删除{pendingDelete?.kind === "folder" ? "文件夹" : "文件"}「{pendingDelete?.name}」？
+            </AlertDialogTitle>
+            <AlertDialogDescription>
+              {pendingDelete?.kind === "folder"
+                ? `该文件夹及其包含的 ${countFiles(pendingDelete)} 个文件将被永久删除，此操作不可撤销。`
+                : "该文件将被永久删除，此操作不可撤销。"}
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>取消</AlertDialogCancel>
+            <AlertDialogAction
+              className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+              onClick={doDelete}
+            >
+              删除
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+
       <Toaster />
     </div>
   );
 }
+

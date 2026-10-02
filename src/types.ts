@@ -3,10 +3,32 @@ import type { ComponentType } from "react";
 /** 文件大类：仅用于图标与通用 UI 分支，具体解析由 parser 注册表决定 */
 export type FileKind = "markdown" | "code" | "pdf" | "text";
 
+/** 视图模式 */
+export type ViewMode = "edit" | "split" | "preview";
+
+/** 工作区文件节点（叶子） */
+export interface WsFile {
+  id: string;
+  kind: "file";
+  name: string;
+  /** 文本类文件为原文；PDF 为 base64 字符串 */
+  content: string;
+}
+
+/** 工作区文件夹节点 */
+export interface WsFolder {
+  id: string;
+  kind: "folder";
+  name: string;
+  children: WsNode[];
+}
+
+export type WsNode = WsFile | WsFolder;
+
+/** 预览组件接收的文件对象（WsFile 结构兼容） */
 export interface DocFile {
   id: string;
   name: string;
-  /** 文本类文件为原文；PDF 为 base64 字符串 */
   content: string;
 }
 
