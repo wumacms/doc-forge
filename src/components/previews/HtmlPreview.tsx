@@ -18,7 +18,7 @@ export default function HtmlPreview({ file }: PreviewProps) {
         </p>
         <button
           type="button"
-          className="flex items-center gap-1 rounded-md px-2 py-1 text-xs text-muted-foreground transition-colors hover:bg-accent hover:text-accent-foreground"
+          className="flex items-center gap-1  px-2 py-1 text-xs text-muted-foreground transition-colors hover:bg-accent hover:text-accent-foreground"
           onClick={() => setNonce((n) => n + 1)}
         >
           <RotateCw className="h-3.5 w-3.5" aria-hidden />

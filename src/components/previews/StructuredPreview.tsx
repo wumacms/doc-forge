@@ -99,7 +99,7 @@ export function StructuredPreview({
   if (!result.ok) {
     return (
       <div className="space-y-3 px-8 py-6">
-        <div className="flex items-start gap-2 rounded-md border border-destructive/40 bg-destructive/5 p-3 text-sm text-destructive">
+        <div className="flex items-start gap-2  border border-destructive/40 bg-destructive/5 p-3 text-sm text-destructive">
           <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0" aria-hidden />
           <div>
             <p className="font-semibold">{format} 解析失败</p>
@@ -108,7 +108,7 @@ export function StructuredPreview({
             </p>
           </div>
         </div>
-        <pre className="overflow-x-auto rounded-md bg-secondary/60 p-3 font-mono text-xs leading-relaxed text-secondary-foreground">
+        <pre className="overflow-x-auto  bg-secondary/60 p-3 font-mono text-xs leading-relaxed text-secondary-foreground">
           {file.content}
         </pre>
       </div>
@@ -124,17 +124,17 @@ export function StructuredPreview({
         <button
           type="button"
           onClick={() => setShowRaw((s) => !s)}
-          className="rounded-md border border-border px-2 py-1 text-xs text-muted-foreground transition-colors hover:bg-accent hover:text-accent-foreground"
+          className=" border border-border px-2 py-1 text-xs text-muted-foreground transition-colors hover:bg-accent hover:text-accent-foreground"
         >
           {showRaw ? "查看数据树" : "查看原文"}
         </button>
       </div>
       {showRaw ? (
-        <pre className="overflow-x-auto rounded-md bg-secondary/60 p-3 font-mono text-xs leading-relaxed text-secondary-foreground">
+        <pre className="overflow-x-auto  bg-secondary/60 p-3 font-mono text-xs leading-relaxed text-secondary-foreground">
           {file.content}
         </pre>
       ) : (
-        <div className="rounded-md border border-border bg-card/50 p-3">
+        <div className=" border border-border bg-card/50 p-3">
           <Node label="root" value={result.data} depth={0} />
         </div>
       )}

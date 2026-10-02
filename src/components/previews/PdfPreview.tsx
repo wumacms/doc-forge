@@ -111,7 +111,7 @@ export default function PdfPreview({ file }: PreviewProps) {
           type="button"
           aria-label="上一页"
           disabled={page <= 1}
-          className="rounded-full p-2 hover:bg-accent disabled:opacity-40"
+          className=" p-2 hover:bg-accent disabled:opacity-40"
           onClick={() => setPage((p) => Math.max(1, p - 1))}
         >
           <ChevronLeft className="h-4 w-4" />
@@ -123,7 +123,7 @@ export default function PdfPreview({ file }: PreviewProps) {
           type="button"
           aria-label="下一页"
           disabled={page >= pages}
-          className="rounded-full p-2 hover:bg-accent disabled:opacity-40"
+          className=" p-2 hover:bg-accent disabled:opacity-40"
           onClick={() => setPage((p) => Math.min(pages, p + 1))}
         >
           <ChevronRight className="h-4 w-4" />
@@ -132,7 +132,7 @@ export default function PdfPreview({ file }: PreviewProps) {
         <button
           type="button"
           aria-label="缩小"
-          className="rounded-full p-2 hover:bg-accent"
+          className=" p-2 hover:bg-accent"
           onClick={() => setZoom((z) => Math.max(0.5, +(z - 0.2).toFixed(2)))}
         >
           <ZoomOut className="h-4 w-4" />
@@ -143,7 +143,7 @@ export default function PdfPreview({ file }: PreviewProps) {
         <button
           type="button"
           aria-label="放大"
-          className="rounded-full p-2 hover:bg-accent"
+          className=" p-2 hover:bg-accent"
           onClick={() => setZoom((z) => Math.min(3, +(z + 0.2).toFixed(2)))}
         >
           <ZoomIn className="h-4 w-4" />
@@ -152,7 +152,7 @@ export default function PdfPreview({ file }: PreviewProps) {
       <div className="flex flex-1 items-start justify-center overflow-auto bg-muted/40 p-6">
         <canvas
           ref={canvasRef}
-          className="rounded-sm bg-white shadow-md"
+          className=" bg-white shadow-md"
           aria-label={`PDF 第 ${page} 页`}
         />
       </div>

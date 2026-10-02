@@ -78,7 +78,7 @@ export default function FileTree({
           type="button"
           aria-label="新建文件"
           title="新建文件"
-          className="rounded-md p-1.5 text-muted-foreground transition-colors hover:bg-accent hover:text-accent-foreground"
+          className=" p-1.5 text-muted-foreground transition-colors hover:bg-accent hover:text-accent-foreground"
           onClick={() => {
             setCreating(true);
             setDraft("");
@@ -106,7 +106,7 @@ export default function FileTree({
                     }
                   }}
                   aria-label="新文件名"
-                  className="w-full rounded-sm border border-ring bg-background px-1.5 py-1 text-sm outline-none"
+                  className="w-full  border border-ring bg-background px-1.5 py-1 text-sm outline-none"
                 />
                 <button type="button" aria-label="确认重命名" className="p-1 text-chart-2 hover:opacity-80" onClick={() => commitRename(f.id)}>
                   <Check className="h-3.5 w-3.5" />
@@ -135,7 +135,7 @@ export default function FileTree({
                   setDraft(f.name);
                 }}
                 className={cn(
-                  "group flex cursor-pointer items-center gap-2 rounded-md px-2 py-1.5 text-sm transition-colors",
+                  "group flex cursor-pointer items-center gap-2  px-2 py-1.5 text-sm transition-colors",
                   active
                     ? "bg-primary text-primary-foreground"
                     : "text-sidebar-foreground hover:bg-accent",
@@ -148,7 +148,7 @@ export default function FileTree({
                     type="button"
                     aria-label={`重命名 ${f.name}`}
                     className={cn(
-                      "rounded p-0.5",
+                      "  p-0.5",
                       active ? "hover:bg-primary-foreground/20" : "hover:bg-background",
                     )}
                     onClick={(e) => {
@@ -163,7 +163,7 @@ export default function FileTree({
                     type="button"
                     aria-label={`删除 ${f.name}`}
                     className={cn(
-                      "rounded p-0.5",
+                      "  p-0.5",
                       active
                         ? "hover:bg-primary-foreground/20"
                         : "hover:bg-background hover:text-destructive",
@@ -197,7 +197,7 @@ export default function FileTree({
               }}
               onBlur={commitCreate}
               aria-label="新文件名"
-              className="w-full rounded-sm border border-ring bg-background px-1.5 py-1 text-sm outline-none placeholder:text-muted-foreground/60"
+              className="w-full  border border-ring bg-background px-1.5 py-1 text-sm outline-none placeholder:text-muted-foreground/60"
             />
           </li>
         )}

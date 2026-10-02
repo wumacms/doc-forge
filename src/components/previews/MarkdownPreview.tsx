@@ -44,7 +44,7 @@ function MermaidBlock({ code }: { code: string }) {
 
   if (error) {
     return (
-      <pre className="my-4 overflow-x-auto rounded-md border border-destructive/40 bg-destructive/5 p-3 text-sm text-destructive">
+      <pre className="my-4 overflow-x-auto  border border-destructive/40 bg-destructive/5 p-3 text-sm text-destructive">
         Mermaid 渲染失败：{error}
       </pre>
     );
@@ -121,7 +121,7 @@ export default function MarkdownPreview({ file }: PreviewProps) {
             }
             return (
               <code
-                className="rounded bg-muted px-1.5 py-0.5 font-mono text-[0.9em]"
+                className="  bg-muted px-1.5 py-0.5 font-mono text-[0.9em]"
                 {...rest}
               >
                 {children}

@@ -33,7 +33,7 @@ pre.hljs {
   display: block;
   overflow-x: auto;
   padding: 1rem;
-  border-radius: 0.5rem;
+  border-radius: 0;
   background: var(--hljs-bg);
   color: var(--hljs-fg);
   font-size: 0.875rem;

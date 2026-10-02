@@ -46,7 +46,7 @@ export default function EditorPane({ file, onChange }: Props) {
       automaticLayout: true,
       fontSize: 14,
       lineHeight: 1.7,
-      wordWrap: "on",
+      wordWrap: "off",
       minimap: { enabled: false },
       scrollBeyondLastLine: false,
       padding: { top: 16, bottom: 16 },

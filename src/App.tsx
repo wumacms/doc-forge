@@ -44,7 +44,7 @@ function ThemeToggle() {
         const idx = THEME_ORDER.indexOf(current);
         setTheme(THEME_ORDER[(idx + 1) % THEME_ORDER.length]);
       }}
-      className="rounded-full border border-border bg-background p-2 text-muted-foreground transition-colors hover:bg-accent hover:text-accent-foreground"
+      className=" border border-border bg-background p-2 text-muted-foreground transition-colors hover:bg-accent hover:text-accent-foreground"
     >
       {/* SSR/水合前固定图标，避免闪烁 */}
       <Icon className="h-4 w-4" aria-hidden />
@@ -137,7 +137,7 @@ export default function App() {
             </span>
           )}
           {parser && (
-            <span className="ml-1 hidden shrink-0 rounded-full border border-border bg-background px-2 py-0.5 text-[11px] text-muted-foreground lg:inline">
+            <span className="ml-1 hidden shrink-0  border border-border bg-background px-2 py-0.5 text-[11px] text-muted-foreground lg:inline">
               {parser.label}
             </span>
           )}
@@ -146,7 +146,7 @@ export default function App() {
           <div
             role="tablist"
             aria-label="视图模式"
-            className="flex items-center gap-1 rounded-full border border-border bg-background p-1"
+            className="flex items-center gap-1  border border-border bg-background p-1"
           >
             {modes.map((m) => {
               const disabled = isPreviewOnly && m.key !== "preview";
@@ -160,7 +160,7 @@ export default function App() {
                   title={disabled ? "该文件类型只读，仅支持预览" : m.label}
                   onClick={() => setMode(m.key)}
                   className={cn(
-                    "flex items-center gap-1.5 rounded-full px-3 py-1 text-sm transition-colors",
+                    "flex items-center gap-1.5  px-3 py-1 text-sm transition-colors",
                     mode === m.key
                       ? "bg-primary text-primary-foreground"
                       : "text-muted-foreground hover:bg-accent hover:text-accent-foreground",
