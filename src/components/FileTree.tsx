@@ -10,7 +10,8 @@ import {
   Check,
   X,
 } from "lucide-react";
-import { kindOf, type DocFile } from "@/types";
+import type { DocFile } from "@/types";
+import { resolveParser } from "@/lib/parsers/registry";
 import { cn } from "@/lib/utils";
 
 interface Props {
@@ -23,7 +24,12 @@ interface Props {
 }
 
 function KindIcon({ name }: { name: string }) {
-  const k = kindOf(name);
+  let k = "text";
+  try {
+    k = resolveParser(name).iconKind;
+  } catch {
+    k = "text";
+  }
   const cls = "h-4 w-4 shrink-0 text-muted-foreground";
   if (k === "markdown") return <FileText className={cls} aria-hidden />;
   if (k === "code") return <FileCode2 className={cls} aria-hidden />;

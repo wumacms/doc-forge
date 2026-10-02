@@ -1,6 +1,6 @@
 import type { DocFile } from "@/types";
 
-const STORAGE_KEY = "docforge.workspace.v1";
+const STORAGE_KEY = "docforge.workspace.v2";
 
 export function uid(): string {
   return Math.random().toString(36).slice(2, 10) + Date.now().toString(36);
@@ -16,23 +16,33 @@ function seedFiles(): DocFile[] {
       name: "README.md",
       content: `# DocForge
 
-一个完全在浏览器中运行的文档工作台：**Monaco 编辑器 + Markdown 实时预览**。
+一个完全在浏览器中运行的**多格式文档工作台**。
 
 ## 功能
 
-- 📝 Monaco 代码/Markdown 编辑器，语法高亮
-- 👀 Markdown 实时预览，支持 GFM 表格、任务列表
-- 🔬 数学公式（KaTeX）：$E = mc^2$，以及行间公式
+- 🌗 右上角一键切换 浅色 / 深色 / 跟随系统（编辑器与预览同步换肤）
+- 🎨 Monaco 编辑器语法高亮：TS、Python、Go、Rust、SQL、Shell 等数十种语言
+- 📑 按类型分发解析器：
+  - \`.md\` → Markdown 渲染（GFM 表格 / 任务列表 / KaTeX / Mermaid）
+  - \`.json\` / \`.yaml\` → 结构化数据树（解析失败给出报错 + 原文）
+  - \`.html\` → 沙箱 iframe 实时渲染
+  - 代码文件 → highlight.js 高亮预览
+  - \`.pdf\` → pdf.js 只读预览（翻页 / 缩放）
+- 💾 所有文件保存在浏览器 localStorage，刷新不丢失
+
+> 新增文档类型：在 \`src/lib/parsers/index.tsx\` 里 \`registerParser\` 一个解析器即可，无需改动 App 或编辑器。
+
+## 公式示例
+
+$E = mc^2$，以及行间公式：
 
 $$
 \\int_{-\\infty}^{\\infty} e^{-x^2}\\,dx = \\sqrt{\\pi}
 $$
 
-- 📊 Mermaid 流程图（见 \`diagrams.md\`）
-- 📄 PDF 预览（见 \`sample.pdf\`）
-- 💾 所有文件保存在浏览器 localStorage，刷新不丢失
-
-> 左侧文件树可以新建、重命名和删除文件；顶部切换 编辑 / 分屏 / 预览 三种视图。
+- [x] 深色主题
+- [x] 多语言高亮
+- [ ] 导出 PDF
 `,
     },
     {
@@ -90,6 +100,98 @@ sequenceDiagram
   E->>P: onChange(节流)
   P-->>U: 渲染结果
 \`\`\`
+`,
+    },
+    {
+      id: uid(),
+      name: "config.json",
+      content: `{
+  "name": "docforge",
+  "version": "1.2.0",
+  "features": {
+    "theme": ["light", "dark", "system"],
+    "parsers": ["markdown", "json", "yaml", "html", "code", "pdf"],
+    "experimental": false
+  },
+  "limits": { "maxFileSize": 10485760, "autosaveMs": 300 }
+}
+`,
+    },
+    {
+      id: uid(),
+      name: "docker-compose.yml",
+      content: `# 示例配置：预览会解析成数据树
+version: "3.9"
+services:
+  web:
+    image: nginx:alpine
+    ports:
+      - "8080:80"
+    environment:
+      TZ: Asia/Shanghai
+      DEBUG: false
+  db:
+    image: postgres:16
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+volumes:
+  pgdata:
+`,
+    },
+    {
+      id: uid(),
+      name: "demo.html",
+      content: `<!doctype html>
+<html lang="zh">
+  <head>
+    <meta charset="utf-8" />
+    <title>沙箱渲染演示</title>
+    <style>
+      body { font-family: sans-serif; display: grid; place-items: center; min-height: 95vh; background: linear-gradient(135deg, #0ea5e9, #64748b); color: #fff; margin: 0; }
+      .card { background: #ffffff22; padding: 2rem 3rem; border-radius: 16px; backdrop-filter: blur(6px); text-align: center; }
+      button { margin-top: 1rem; padding: .5rem 1.25rem; border: 0; border-radius: 999px; background: #fff; color: #0284c7; font-weight: 700; cursor: pointer; }
+    </style>
+  </head>
+  <body>
+    <div class="card">
+      <h1>Hello DocForge 👋</h1>
+      <p>这段 HTML 在隔离沙箱 iframe 中渲染。</p>
+      <button onclick="this.textContent='已点击 ' + (++window.__n || 1) + ' 次'">点我</button>
+    </div>
+  </body>
+</html>
+`,
+    },
+    {
+      id: uid(),
+      name: "game_of_life.py",
+      content: `"""康威生命游戏 —— 编辑器与预览均有 Python 高亮"""
+from typing import List
+
+Grid = List[List[int]]
+
+
+def step(grid: Grid) -> Grid:
+    rows, cols = len(grid), len(grid[0])
+    nxt = [[0] * cols for _ in range(rows)]
+    for r in range(rows):
+        for c in range(cols):
+            n = sum(
+                grid[(r + dr) % rows][(c + dc) % cols]
+                for dr in (-1, 0, 1)
+                for dc in (-1, 0, 1)
+                if (dr, dc) != (0, 0)
+            )
+            alive = grid[r][c]
+            nxt[r][c] = int(alive and n in (2, 3) or not alive and n == 3)
+    return nxt
+
+
+glider = [[0, 1, 0], [0, 0, 1], [1, 1, 1]]
+g = glider
+for _ in range(4):
+    g = step(g)
+print("\\n".join("".join("█" if cell else "·" for cell in row) for row in g))
 `,
     },
     {

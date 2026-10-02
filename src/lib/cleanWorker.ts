@@ -34,10 +34,17 @@ function isNativeCtor(fn: unknown): boolean {
 
 /**
  * 获取（尽可能）未被劫持的 Worker 构造器。
- * 优先 iframe realm；取不到时回退主世界。
+ * 主世界构造器若本身是原生实现则优先使用——iframe realm 的
+ * opaque origin 会让同源 worker 脚本被当作跨源请求（COOP 环境），
+ * 触发 ERR_BLOCKED_BY_RESPONSE。仅当主世界疑似被代理劫持时，
+ * 才尝试 iframe realm 的干净构造器。
  */
 function getPristineWorkerCtor(): typeof Worker {
   if (cachedCtor) return cachedCtor;
+  if (isNativeCtor(Worker)) {
+    cachedCtor = Worker;
+    return cachedCtor;
+  }
   try {
     const frame = document.createElement("iframe");
     frame.style.display = "none";

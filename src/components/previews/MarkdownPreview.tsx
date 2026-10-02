@@ -3,7 +3,9 @@ import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import remarkMath from "remark-math";
 import rehypeKatex from "rehype-katex";
+import hljs from "highlight.js";
 import "katex/dist/katex.min.css";
+import "@/styles/hljs.css";
 import type { PreviewProps } from "@/types";
 
 let mermaidSeq = 0;
@@ -55,9 +57,23 @@ function CodeBlock({ className, children }: { className?: string; children?: Rea
   const lang = match?.[1];
   const code = String(children ?? "").replace(/\n$/, "");
   if (lang === "mermaid") return <MermaidBlock code={code} />;
+  let html: string | null = null;
+  try {
+    if (lang && hljs.getLanguage(lang)) {
+      html = hljs.highlight(code, { language: lang, ignoreIllegals: true }).value;
+    } else {
+      html = hljs.highlightAuto(code).value;
+    }
+  } catch {
+    html = null;
+  }
   return (
-    <pre className="my-4 overflow-x-auto rounded-lg bg-secondary p-4 text-sm text-secondary-foreground">
-      <code>{code}</code>
+    <pre className="hljs my-4">
+      {html === null ? (
+        <code>{code}</code>
+      ) : (
+        <code dangerouslySetInnerHTML={{ __html: html }} />
+      )}
     </pre>
   );
 }

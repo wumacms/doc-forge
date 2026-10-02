@@ -1,6 +1,7 @@
 import { useEffect, useRef } from "react";
-import { monaco } from "@/lib/monacoSetup";
-import { monacoLangOf } from "@/types";
+import { useTheme } from "next-themes";
+import { monaco, syncMonacoTheme } from "@/lib/monacoSetup";
+import { resolveParser } from "@/lib/parsers/registry";
 import type { DocFile } from "@/types";
 
 interface Props {
@@ -16,14 +17,29 @@ interface ModelEntry {
 /** 每个文件一个 model，切换文件时保留 undo 历史与视图状态 */
 const models = new Map<string, ModelEntry>();
 
+/** 通过解析器注册表获取 Monaco 语言 id（未知类型回退 plaintext） */
+function languageOf(name: string): string {
+  try {
+    const parser = resolveParser(name);
+    return parser.monacoLanguage(
+      name.slice(name.lastIndexOf(".") + 1).toLowerCase(),
+      name,
+    );
+  } catch {
+    return "plaintext";
+  }
+}
+
 export default function EditorPane({ file, onChange }: Props) {
   const containerRef = useRef<HTMLDivElement>(null);
   const editorRef = useRef<monaco.editor.IStandaloneCodeEditor | null>(null);
   const onChangeRef = useRef(onChange);
   onChangeRef.current = onChange;
+  const { resolvedTheme } = useTheme();
 
   useEffect(() => {
     if (!containerRef.current) return;
+    syncMonacoTheme();
     const editor = monaco.editor.create(containerRef.current, {
       value: "",
       language: "plaintext",
@@ -44,22 +60,28 @@ export default function EditorPane({ file, onChange }: Props) {
     };
   }, []);
 
+  // 主题切换时同步 Monaco 主题
+  useEffect(() => {
+    syncMonacoTheme();
+  }, [resolvedTheme]);
+
   useEffect(() => {
     const editor = editorRef.current;
     if (!editor) return;
 
+    const lang = languageOf(file.name);
     let entry = models.get(file.id);
     if (!entry) {
       const model = monaco.editor.createModel(
         file.content,
-        monacoLangOf(file.name),
+        lang,
         monaco.Uri.parse(`file:///docforge/${encodeURIComponent(file.id)}`),
       );
       entry = { model, state: null };
       models.set(file.id, entry);
     } else {
       // 文件可能已重命名，同步语言
-      monaco.editor.setModelLanguage(entry.model, monacoLangOf(file.name));
+      monaco.editor.setModelLanguage(entry.model, lang);
     }
 
     const current = editor.getModel();
