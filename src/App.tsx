@@ -227,9 +227,10 @@ export default function App() {
         return;
       }
       const items = files.map((f, i) => ({ path: paths[i], file: f }));
+      // 函数式更新：确保拿到最新 nodes，并立即保存
       setNodes((prev) => {
         const next = mergeByPaths(prev, items);
-        // 持久化在 nodes 变化的 effect 中统一触发
+        void saveWorkspace(next);
         return next;
       });
       setActiveId(files[0].id);

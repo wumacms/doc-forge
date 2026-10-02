@@ -90,11 +90,19 @@ export function setPref(key: string, value: string): void {
 export async function kvSet(key: string, value: unknown): Promise<void> {
   try {
     await idbSet(key, value);
-  } catch {
+  } catch (idbErr) {
+    // IDB 失败（配额超限/被阻止等）→ 降级 localStorage，并打印原因便于排查
     try {
       localStorage.setItem(key, JSON.stringify(value));
-    } catch (e) {
-      console.warn("[DocForge] 持久化失败（存储可能已满）：", e);
+      console.warn(
+        "[DocForge] 已降级到 localStorage 持久化（IndexedDB 失败）:",
+        idbErr,
+      );
+    } catch (lsErr) {
+      console.error("[DocForge] 持久化完全失败（IDB + localStorage 均不可用）:", {
+        idb: idbErr,
+        localStorage: lsErr,
+      });
     }
   }
 }
