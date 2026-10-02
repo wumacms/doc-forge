@@ -23,6 +23,9 @@ interface Props {
   nodes: WsNode[];
   activeId: string | null;
   onSelect: (id: string) => void;
+  /** 展开的文件夹 id 集合（状态提升到 App 以便持久化） */
+  expanded: Set<string>;
+  onToggleExpand: (id: string) => void;
   /** parentId 为 null 表示根级 */
   onCreateFile: (parentId: string | null, name: string) => void;
   onCreateFolder: (parentId: string | null, name: string) => void;
@@ -296,21 +299,12 @@ function Row({
 
 export default function FileTree(props: Props) {
   const { nodes, onCreateFile, onCreateFolder, onRequestDelete } = props;
-  const [expanded, setExpanded] = useState<Set<string>>(
-    () => new Set(nodes.filter((n) => n.kind === "folder").map((n) => n.id)),
-  );
+  const expanded = props.expanded;
+  const toggleExpand = props.onToggleExpand;
   const [creating, setCreating] = useState<Creating>(null);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [draft, setDraft] = useState("");
   const listRef = useRef<HTMLUListElement>(null);
-
-  const toggleExpand = (id: string) =>
-    setExpanded((prev) => {
-      const next = new Set(prev);
-      if (next.has(id)) next.delete(id);
-      else next.add(id);
-      return next;
-    });
 
   const parentOf = (id: string | null): WsFolder | null =>
     id ? findNode(nodes, id)?.parent ?? null : null;

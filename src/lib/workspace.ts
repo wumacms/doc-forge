@@ -44,6 +44,15 @@ export function collectFileIds(node: WsNode, acc: string[] = []): string[] {
   return acc;
 }
 
+/** 收集文件夹节点自身及其子孙文件夹的 id（用于清理展开状态） */
+export function collectFolderIds(node: WsNode, acc: string[] = []): string[] {
+  if (node.kind === "folder") {
+    acc.push(node.id);
+    node.children.forEach((c) => collectFolderIds(c, acc));
+  }
+  return acc;
+}
+
 /** 同级唯一命名：冲突时追加 (1)、(2)… */
 export function uniqueName(
   siblings: WsNode[],

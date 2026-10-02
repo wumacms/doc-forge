@@ -30,6 +30,7 @@ import { resolveParser } from "@/lib/parsers/registry";
 import "@/lib/parsers"; // 副作用：注册全部文档解析器
 import {
   collectFileIds,
+  collectFolderIds,
   countFiles,
   findNode,
   insertChild,
@@ -50,11 +51,29 @@ import { cn } from "@/lib/utils";
 
 const VIEW_MODE_KEY = "docforge:view-mode";
 const VIEW_MODES: ViewMode[] = ["edit", "split", "preview"];
+const EXPANDED_KEY = "docforge:expanded-folders";
+const ACTIVE_KEY = "docforge:active-file";
 
 /** 视图模式属于用户偏好：同步从 localStorage 恢复，非法值回退分屏 */
 function initialViewMode(): ViewMode {
   const saved = getPref(VIEW_MODE_KEY);
   return VIEW_MODES.includes(saved as ViewMode) ? (saved as ViewMode) : "split";
+}
+
+/** 恢复展开的文件夹集合；无记录时回退"展开根级文件夹"的默认行为 */
+function restoreExpanded(nodes: WsNode[]): Set<string> {
+  const raw = getPref(EXPANDED_KEY);
+  if (raw) {
+    try {
+      const arr = JSON.parse(raw) as unknown;
+      if (Array.isArray(arr) && arr.every((x) => typeof x === "string")) {
+        return new Set(arr as string[]);
+      }
+    } catch {
+      // 解析失败则走默认
+    }
+  }
+  return new Set(nodes.filter((n) => n.kind === "folder").map((n) => n.id));
 }
 
 // 提前注册 MonacoEnvironment，避免首次创建编辑器时才配置的竞态
@@ -109,6 +128,7 @@ export default function App() {
   const [nodes, setNodes] = useState<WsNode[]>([]);
   const [loaded, setLoaded] = useState(false);
   const [activeId, setActiveId] = useState<string | null>(null);
+  const [expanded, setExpanded] = useState<Set<string>>(() => new Set());
   const [mode, setMode] = useState<ViewMode>(initialViewMode);
   const [pendingDelete, setPendingDelete] = useState<WsNode | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -121,7 +141,15 @@ export default function App() {
     loadWorkspace().then((data) => {
       if (cancelled) return;
       setNodes(data);
-      setActiveId(firstFile(data)?.id ?? null);
+      // 恢复上次选中的文件；已被删除或非法时回退第一个文件
+      const savedId = getPref(ACTIVE_KEY);
+      const savedHit = savedId ? findNode(data, savedId) : null;
+      setActiveId(
+        savedHit && savedHit.node.kind === "file"
+          ? savedHit.node.id
+          : firstFile(data)?.id ?? null,
+      );
+      setExpanded(restoreExpanded(data));
       setLoaded(true);
     });
     return () => {
@@ -176,7 +204,18 @@ export default function App() {
       children: [],
     };
     setNodes((prev) => insertChild(prev, parentId, folder));
+    // 新建的文件夹默认展开，让用户立刻看到它
+    setExpanded((prev) => new Set(prev).add(folder.id));
   };
+
+  const toggleExpand = useCallback((id: string) => {
+    setExpanded((prev) => {
+      const next = new Set(prev);
+      if (next.has(id)) next.delete(id);
+      else next.add(id);
+      return next;
+    });
+  }, []);
 
   const handleRename = (id: string, name: string) => {
     setNodes((prev) => renameNode(prev, id, name));
@@ -188,6 +227,19 @@ export default function App() {
     ids.forEach(disposeModel);
     const nextNodes = removeNode(nodes, pendingDelete.id);
     setNodes(nextNodes);
+    // 清理已删除文件夹的展开记录，避免偏好里积累悬空 id
+    const deadIds = new Set<string>(
+      pendingDelete.kind === "folder"
+        ? collectFolderIds(pendingDelete)
+        : [],
+    );
+    if (deadIds.size > 0) {
+      setExpanded((prev) => {
+        const next = new Set(prev);
+        deadIds.forEach((id) => next.delete(id));
+        return next;
+      });
+    }
     if (activeId && ids.includes(activeId)) {
       setActiveId(firstFile(nextNodes)?.id ?? null);
     }
@@ -210,6 +262,17 @@ export default function App() {
     setPref(VIEW_MODE_KEY, mode);
   }, [mode]);
 
+  /* ---------- 持久化：展开的文件夹 / 当前选中文件（加载完成后再写，避免初始空值覆盖已存偏好） ---------- */
+  useEffect(() => {
+    if (!loaded) return;
+    setPref(EXPANDED_KEY, JSON.stringify([...expanded]));
+  }, [expanded, loaded]);
+
+  useEffect(() => {
+    if (!loaded) return;
+    setPref(ACTIVE_KEY, activeId ?? "");
+  }, [activeId, loaded]);
+
   /* ---------- 批量导入 ---------- */
   const importFrom = useCallback(
     async (
@@ -231,6 +294,19 @@ export default function App() {
       setNodes((prev) => {
         const next = mergeByPaths(prev, items);
         void saveWorkspace(next);
+        // 导入新建的文件夹自动展开，让用户立刻看到结构
+        const before = new Set<string>();
+        prev.forEach((n) => collectFolderIds(n).forEach((id) => before.add(id)));
+        const created = next
+          .flatMap((n) => collectFolderIds(n))
+          .filter((id) => !before.has(id));
+        if (created.length > 0) {
+          setExpanded((e) => {
+            const ne = new Set(e);
+            created.forEach((id) => ne.add(id));
+            return ne;
+          });
+        }
         return next;
       });
       setActiveId(files[0].id);
@@ -408,6 +484,8 @@ export default function App() {
           nodes={nodes}
           activeId={activeId}
           onSelect={setActiveId}
+          expanded={expanded}
+          onToggleExpand={toggleExpand}
           onCreateFile={handleCreateFile}
           onCreateFolder={handleCreateFolder}
           onRename={handleRename}
