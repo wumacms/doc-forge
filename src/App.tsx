@@ -200,6 +200,9 @@ export default function App() {
       content: "",
     };
     setNodes((prev) => insertChild(prev, parentId, file));
+    if (parentId) {
+      setExpanded((prev) => (prev.has(parentId) ? prev : new Set(prev).add(parentId)));
+    }
     setActiveId(file.id);
     setSelectedId(file.id);
   };
@@ -212,6 +215,9 @@ export default function App() {
       children: [],
     };
     setNodes((prev) => insertChild(prev, parentId, folder));
+    if (parentId) {
+      setExpanded((prev) => (prev.has(parentId) ? prev : new Set(prev).add(parentId)));
+    }
     // 新建的文件夹默认展开，让用户立刻看到它
     setExpanded((prev) => new Set(prev).add(folder.id));
   };

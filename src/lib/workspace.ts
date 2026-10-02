@@ -73,11 +73,14 @@ function mapTree(nodes: WsNode[], fn: (n: WsNode) => WsNode | null): WsNode[] {
   for (const n of nodes) {
     const mapped = fn(n);
     if (!mapped) continue;
-    out.push(
-      mapped.kind === "folder" && mapped !== n
-        ? { ...mapped, children: mapTree(mapped.children, fn) }
-        : mapped,
-    );
+    if (mapped.kind === "folder") {
+      out.push({
+        ...mapped,
+        children: mapTree(mapped.children, fn),
+      });
+    } else {
+      out.push(mapped);
+    }
   }
   return out;
 }
