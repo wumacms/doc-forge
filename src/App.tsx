@@ -23,9 +23,12 @@ import {
 import { Toaster } from "@/components/ui/toaster";
 import { toast } from "@/hooks/use-toast";
 import FileTree from "@/components/FileTree";
+import OutlinePane from "@/components/OutlinePane";
+import SidebarTabs, { type SidebarTab } from "@/components/SidebarTabs";
 import EditorPane, { disposeModel } from "@/components/editor/EditorPane";
 import PreviewPane from "@/components/PreviewPane";
 import type { ViewMode, WsFile, WsFolder, WsNode } from "@/types";
+import { extractOutline, type OutlineItem } from "@/lib/outline";
 import { resolveParser } from "@/lib/parsers/registry";
 import "@/lib/parsers"; // 副作用：注册全部文档解析器
 import {
@@ -45,7 +48,7 @@ import {
   uniqueName,
   updateFile,
 } from "@/lib/workspace";
-import { setupMonaco } from "@/lib/monacoSetup";
+import { setupMonaco, monaco } from "@/lib/monacoSetup";
 import { getPref, setPref } from "@/lib/storage";
 import { cn } from "@/lib/utils";
 
@@ -53,6 +56,7 @@ const VIEW_MODE_KEY = "docforge:view-mode";
 const VIEW_MODES: ViewMode[] = ["edit", "split", "preview"];
 const EXPANDED_KEY = "docforge:expanded-folders";
 const ACTIVE_KEY = "docforge:active-file";
+const SIDEBAR_KEY = "docforge:sidebar-tab";
 
 /** 视图模式属于用户偏好：同步从 localStorage 恢复，非法值回退分屏 */
 function initialViewMode(): ViewMode {
@@ -74,6 +78,11 @@ function restoreExpanded(nodes: WsNode[]): Set<string> {
     }
   }
   return new Set(nodes.filter((n) => n.kind === "folder").map((n) => n.id));
+}
+
+/** 侧边栏视图偏好：files / outline（仅 Markdown 时 outline 可用） */
+function initialSidebarTab(): SidebarTab {
+  return getPref(SIDEBAR_KEY) === "outline" ? "outline" : "files";
 }
 
 // 提前注册 MonacoEnvironment，避免首次创建编辑器时才配置的竞态
@@ -130,9 +139,13 @@ export default function App() {
   const [activeId, setActiveId] = useState<string | null>(null);
   const [expanded, setExpanded] = useState<Set<string>>(() => new Set());
   const [mode, setMode] = useState<ViewMode>(initialViewMode);
+  const [sidebarTab, setSidebarTab] = useState<SidebarTab>(initialSidebarTab);
+  const [cursorLine, setCursorLine] = useState<number | null>(null);
+  const editorInstanceRef = useRef<monaco.editor.IStandaloneCodeEditor | null>(null);
   const [pendingDelete, setPendingDelete] = useState<WsNode | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const folderInputRef = useRef<HTMLInputElement>(null);
+  const mainRef = useRef<HTMLElement>(null);
   const [dragOver, setDragOver] = useState(false);
 
   /* ---------- 加载持久化数据 ---------- */
@@ -171,6 +184,34 @@ export default function App() {
   );
   const editable = parser?.editable ?? false;
   const effectiveMode: ViewMode = editable ? mode : "preview";
+
+  /* ---------- 大纲（仅 Markdown） ---------- */
+  const isMarkdown = parser?.id === "markdown";
+  const outline = useMemo(
+    () => (isMarkdown && active ? extractOutline(active.content) : []),
+    [isMarkdown, active],
+  );
+  // 非 Markdown 文件时强制回到"文件目录"视图
+  const sidebarTabEffective: SidebarTab =
+    isMarkdown && sidebarTab === "outline" ? "outline" : "files";
+
+  const handleSidebarTab = (t: SidebarTab) => {
+    setSidebarTab(t);
+    setPref(SIDEBAR_KEY, t);
+  };
+
+  /** 点击大纲：编辑器跳行；分屏/预览时同步滚动预览区到对应标题 */
+  const handleOutlineJump = (index: number, item: OutlineItem) => {
+    const editor = editorInstanceRef.current;
+    if (editor && editable) {
+      editor.revealLineInCenter(item.line);
+      editor.setPosition({ lineNumber: item.line, column: 1 });
+      editor.focus();
+    }
+    // 预览中的标题与大纲条目按文档顺序一一对应（id="oc-<i>"）
+    const host = mainRef.current?.querySelector(`#oc-${index}`);
+    if (host) host.scrollIntoView({ behavior: "smooth", block: "start" });
+  };
 
   const modes: { key: ViewMode; label: string; icon: typeof PenLine }[] = [
     { key: "edit", label: "编辑", icon: PenLine },
@@ -480,19 +521,40 @@ export default function App() {
 
       {/* 主体 */}
       <div className="flex min-h-0 flex-1">
-        <FileTree
-          nodes={nodes}
-          activeId={activeId}
-          onSelect={setActiveId}
-          expanded={expanded}
-          onToggleExpand={toggleExpand}
-          onCreateFile={handleCreateFile}
-          onCreateFolder={handleCreateFolder}
-          onRename={handleRename}
-          onRequestDelete={setPendingDelete}
-        />
+        {sidebarTabEffective === "outline" ? (
+          <OutlinePane
+            items={outline}
+            activeLine={cursorLine}
+            onJump={handleOutlineJump}
+            tabs={
+              <SidebarTabs value="outline" onChange={handleSidebarTab} />
+            }
+          />
+        ) : (
+          <FileTree
+            nodes={nodes}
+            activeId={activeId}
+            onSelect={setActiveId}
+            expanded={expanded}
+            onToggleExpand={toggleExpand}
+            onCreateFile={handleCreateFile}
+            onCreateFolder={handleCreateFolder}
+            onRename={handleRename}
+            onRequestDelete={setPendingDelete}
+            header={
+              isMarkdown ? (
+                <SidebarTabs value="files" onChange={handleSidebarTab} />
+              ) : (
+                <h2 className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+                  工作区
+                </h2>
+              )
+            }
+          />
+        )}
 
         <main
+          ref={mainRef}
           className="relative min-w-0 flex-1"
           onDragOver={(e) => {
             e.preventDefault();
@@ -530,6 +592,8 @@ export default function App() {
                     onChange={(content) =>
                       setNodes((prev) => updateFile(prev, active.id, content))
                     }
+                    onCursorLine={setCursorLine}
+                    editorRef={editorInstanceRef}
                   />
                 </div>
               )}

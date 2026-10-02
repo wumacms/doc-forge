@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, type MutableRefObject } from "react";
 import { useTheme } from "next-themes";
 import { monaco, syncMonacoTheme } from "@/lib/monacoSetup";
 import { resolveParser } from "@/lib/parsers/registry";
@@ -7,6 +7,10 @@ import type { WsFile } from "@/types";
 interface Props {
   file: WsFile;
   onChange: (content: string) => void;
+  /** 光标行变化回调（1-based），供大纲高亮 */
+  onCursorLine?: (line: number) => void;
+  /** App 持有的编辑器实例 ref，用于大纲跳转 revealLine */
+  editorRef?: MutableRefObject<monaco.editor.IStandaloneCodeEditor | null>;
 }
 
 interface ModelEntry {
@@ -30,11 +34,13 @@ function languageOf(name: string): string {
   }
 }
 
-export default function EditorPane({ file, onChange }: Props) {
+export default function EditorPane({ file, onChange, onCursorLine, editorRef }: Props) {
   const containerRef = useRef<HTMLDivElement>(null);
-  const editorRef = useRef<monaco.editor.IStandaloneCodeEditor | null>(null);
+  const editorInstanceRef = useRef<monaco.editor.IStandaloneCodeEditor | null>(null);
   const onChangeRef = useRef(onChange);
   onChangeRef.current = onChange;
+  const onCursorLineRef = useRef(onCursorLine);
+  onCursorLineRef.current = onCursorLine;
   const { resolvedTheme } = useTheme();
   // undefined = 尚未解析出主题，交给 DOM class 兜底
   const monacoDark = resolvedTheme ? resolvedTheme === "dark" : undefined;
@@ -55,11 +61,21 @@ export default function EditorPane({ file, onChange }: Props) {
       renderLineHighlight: "line",
       scrollbar: { verticalScrollbarSize: 10, horizontalScrollbarSize: 10 },
     });
-    editorRef.current = editor;
+    editorInstanceRef.current = editor;
+    if (editorRef) editorRef.current = editor;
+
+    // 光标行上报（大纲高亮）
+    const curSub = editor.onDidChangeCursorPosition((e) => {
+      onCursorLineRef.current?.(e.position.lineNumber);
+    });
+
     return () => {
+      curSub.dispose();
       editor.dispose();
-      editorRef.current = null;
+      editorInstanceRef.current = null;
+      if (editorRef) editorRef.current = null;
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   // 主题切换时同步 Monaco 主题（用 resolvedTheme 显式驱动，不读 DOM class，
@@ -69,7 +85,7 @@ export default function EditorPane({ file, onChange }: Props) {
   }, [monacoDark]);
 
   useEffect(() => {
-    const editor = editorRef.current;
+    const editor = editorInstanceRef.current;
     if (!editor) return;
 
     const lang = languageOf(file.name);

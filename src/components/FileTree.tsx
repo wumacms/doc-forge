@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useRef, useState, type ReactNode } from "react";
 import {
   ChevronDown,
   ChevronRight,
@@ -32,6 +32,8 @@ interface Props {
   onRename: (id: string, name: string) => void;
   /** 交由上层弹出确认框 */
   onRequestDelete: (node: WsNode) => void;
+  /** 头部标题区的替代内容（如目录/大纲切换按钮） */
+  header?: ReactNode;
 }
 
 type Creating = { parentId: string | null; kind: "file" | "folder" } | null;
@@ -298,7 +300,7 @@ function Row({
 }
 
 export default function FileTree(props: Props) {
-  const { nodes, onCreateFile, onCreateFolder, onRequestDelete } = props;
+  const { nodes, onCreateFile, onCreateFolder, onRequestDelete, header } = props;
   const expanded = props.expanded;
   const toggleExpand = props.onToggleExpand;
   const [creating, setCreating] = useState<Creating>(null);
@@ -312,9 +314,13 @@ export default function FileTree(props: Props) {
   return (
     <aside className="flex h-full w-60 shrink-0 flex-col border-r border-border bg-sidebar">
       <div className="flex items-center justify-between px-3 py-2.5">
-        <h2 className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-          工作区
-        </h2>
+        {header ? (
+          header
+        ) : (
+          <h2 className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+            工作区
+          </h2>
+        )}
         <div className="flex items-center gap-0.5">
           <button
             type="button"
