@@ -36,10 +36,12 @@ export default function EditorPane({ file, onChange }: Props) {
   const onChangeRef = useRef(onChange);
   onChangeRef.current = onChange;
   const { resolvedTheme } = useTheme();
+  // undefined = 尚未解析出主题，交给 DOM class 兜底
+  const monacoDark = resolvedTheme ? resolvedTheme === "dark" : undefined;
 
   useEffect(() => {
     if (!containerRef.current) return;
-    syncMonacoTheme();
+    syncMonacoTheme(monacoDark);
     const editor = monaco.editor.create(containerRef.current, {
       value: "",
       language: "plaintext",
@@ -60,10 +62,11 @@ export default function EditorPane({ file, onChange }: Props) {
     };
   }, []);
 
-  // 主题切换时同步 Monaco 主题
+  // 主题切换时同步 Monaco 主题（用 resolvedTheme 显式驱动，不读 DOM class，
+  // 避免子组件 effect 先于 ThemeProvider 执行而拿到旧主题）
   useEffect(() => {
-    syncMonacoTheme();
-  }, [resolvedTheme]);
+    syncMonacoTheme(monacoDark);
+  }, [monacoDark]);
 
   useEffect(() => {
     const editor = editorRef.current;

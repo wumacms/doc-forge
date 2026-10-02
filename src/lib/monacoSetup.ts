@@ -80,13 +80,20 @@ function defineThemes(): void {
   }
 }
 
-/** 当前 DOM 处于 .dark 时切到暗色主题 */
-export function syncMonacoTheme(): void {
-  const dark = document.documentElement.classList.contains("dark");
+/**
+ * 切换 Monaco 主题。
+ * 必须显式传入 dark：next-themes 是在父组件（ThemeProvider）的 effect 里
+ * 把 .dark 写进 DOM 的，而子组件 EditorPane 的 effect 先执行——若在此处
+ * 读取 class，拿到的永远是上一次的旧主题，导致编辑器与界面颜色相反。
+ * 仅在未传参时（如首帧 resolvedTheme 尚未就绪）才回退到读 DOM。
+ */
+export function syncMonacoTheme(dark?: boolean): void {
+  const isDark =
+    dark ?? document.documentElement.classList.contains("dark");
   try {
-    monaco.editor.setTheme(dark ? "docforge-dark" : "docforge-light");
+    monaco.editor.setTheme(isDark ? "docforge-dark" : "docforge-light");
   } catch {
-    monaco.editor.setTheme(dark ? "vs-dark" : "vs");
+    monaco.editor.setTheme(isDark ? "vs-dark" : "vs");
   }
 }
 
