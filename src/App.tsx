@@ -137,6 +137,8 @@ export default function App() {
   const [nodes, setNodes] = useState<WsNode[]>([]);
   const [loaded, setLoaded] = useState(false);
   const [activeId, setActiveId] = useState<string | null>(null);
+  /** 侧边栏选中的节点（文件或文件夹），决定头部"新建"按钮的目标位置 */
+  const [selectedId, setSelectedId] = useState<string | null>(null);
   const [expanded, setExpanded] = useState<Set<string>>(() => new Set());
   const [mode, setMode] = useState<ViewMode>(initialViewMode);
   const [sidebarTab, setSidebarTab] = useState<SidebarTab>(initialSidebarTab);
@@ -162,6 +164,7 @@ export default function App() {
           ? savedHit.node.id
           : firstFile(data)?.id ?? null,
       );
+      setSelectedId(savedHit?.node.id ?? null);
       setExpanded(restoreExpanded(data));
       setLoaded(true);
     });
@@ -235,6 +238,7 @@ export default function App() {
     };
     setNodes((prev) => insertChild(prev, parentId, file));
     setActiveId(file.id);
+    setSelectedId(file.id);
   };
 
   const handleCreateFolder = (parentId: string | null, name: string) => {
@@ -268,6 +272,10 @@ export default function App() {
     ids.forEach(disposeModel);
     const nextNodes = removeNode(nodes, pendingDelete.id);
     setNodes(nextNodes);
+    // 被删节点（或其祖先被删）时清理选中态
+    if (selectedId === pendingDelete.id || !findNode(nextNodes, selectedId ?? "")) {
+      setSelectedId(null);
+    }
     // 清理已删除文件夹的展开记录，避免偏好里积累悬空 id
     const deadIds = new Set<string>(
       pendingDelete.kind === "folder"
@@ -534,7 +542,11 @@ export default function App() {
           <FileTree
             nodes={nodes}
             activeId={activeId}
-            onSelect={setActiveId}
+            selectedId={selectedId}
+            onSelectNode={(node) => {
+              setSelectedId(node.id);
+              if (node.kind === "file") setActiveId(node.id);
+            }}
             expanded={expanded}
             onToggleExpand={toggleExpand}
             onCreateFile={handleCreateFile}
