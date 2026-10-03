@@ -7,6 +7,9 @@ import remarkGfm from "remark-gfm";
 import remarkMath from "remark-math";
 import rehypeKatex from "rehype-katex";
 import hljs from "highlight.js";
+import { Check, Copy, Code2 } from "lucide-react";
+import { cn } from "@/lib/utils";
+import { formatCodeBlockForCopy, copyToClipboard } from "@/lib/clipboard";
 import "katex/dist/katex.min.css";
 import "@/styles/hljs.css";
 import type { PreviewProps } from "@/types";
@@ -53,13 +56,30 @@ function MermaidBlock({ code }: { code: string }) {
 
   if (error) {
     return (
-      <pre className="my-4 overflow-x-auto  border border-destructive/40 bg-destructive/5 p-3 text-sm text-destructive">
+      <pre className="my-4 overflow-x-auto border border-destructive/40 bg-destructive/5 p-3 text-sm text-destructive">
         Mermaid 渲染失败：{error}
       </pre>
     );
   }
   return <div ref={ref} className="my-4 flex justify-center overflow-x-auto" />;
 }
+
+const HLJS_ALIAS: Record<string, string> = {
+  vue: "xml",
+  shell: "bash",
+  zsh: "bash",
+  sh: "bash",
+  ts: "typescript",
+  js: "javascript",
+  py: "python",
+  yml: "yaml",
+  rb: "ruby",
+  cs: "csharp",
+  "c++": "cpp",
+  "c#": "csharp",
+  golang: "go",
+  docker: "dockerfile",
+};
 
 function CodeBlock({
   className,
@@ -68,15 +88,40 @@ function CodeBlock({
   className?: string;
   children?: ReactNode;
 }) {
-  const match = /language-(\w+)/.exec(className ?? "");
-  const lang = match?.[1];
+  const match = /language-([^\s]+)/.exec(className ?? "");
+  const rawLang = match?.[1] ?? "";
+  const lang = rawLang.toLowerCase();
   const code = String(children ?? "").replace(/\n$/, "");
+
   if (lang === "mermaid") return <MermaidBlock code={code} />;
+
+  const [copied, setCopied] = useState(false);
+  const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  useEffect(() => {
+    return () => {
+      if (timerRef.current) clearTimeout(timerRef.current);
+    };
+  }, []);
+
+  const handleCopy = async () => {
+    const textToCopy = formatCodeBlockForCopy(code, rawLang);
+    const success = await copyToClipboard(textToCopy);
+    if (success) {
+      setCopied(true);
+      if (timerRef.current) clearTimeout(timerRef.current);
+      timerRef.current = setTimeout(() => {
+        setCopied(false);
+      }, 2000);
+    }
+  };
+
+  const hljsLang = HLJS_ALIAS[lang] ?? lang;
   let html: string | null = null;
   try {
-    if (lang && hljs.getLanguage(lang)) {
+    if (hljsLang && hljs.getLanguage(hljsLang)) {
       html = hljs.highlight(code, {
-        language: lang,
+        language: hljsLang,
         ignoreIllegals: true,
       }).value;
     } else {
@@ -85,14 +130,52 @@ function CodeBlock({
   } catch {
     html = null;
   }
+
+  const displayLang = rawLang || "text";
+
   return (
-    <pre className="hljs my-4">
-      {html === null ? (
-        <code>{code}</code>
-      ) : (
-        <code dangerouslySetInnerHTML={{ __html: html }} />
-      )}
-    </pre>
+    <div className="group my-4 overflow-hidden rounded-[var(--radius)] border border-border/60 bg-[var(--hljs-bg)] shadow-xs">
+      {/* 标题栏：左侧语言标识，右侧复制按钮 */}
+      <div className="flex items-center justify-between border-b border-border/40 bg-muted/40 px-3.5 py-1.5 text-xs text-muted-foreground select-none">
+        <div className="flex items-center gap-1.5 font-mono text-[12px] font-medium text-muted-foreground/85">
+          <Code2 className="h-3.5 w-3.5 opacity-60" aria-hidden="true" />
+          <span className="tracking-wide">{displayLang}</span>
+        </div>
+        <button
+          type="button"
+          onClick={handleCopy}
+          className={cn(
+            "flex items-center gap-1.5 rounded px-2 py-0.5 text-xs font-medium transition-colors cursor-pointer select-none",
+            copied
+              ? "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400"
+              : "text-muted-foreground hover:bg-accent/60 hover:text-foreground",
+          )}
+          title={copied ? "已复制到剪贴板" : "复制代码块"}
+          aria-label={copied ? "已复制" : "复制代码块"}
+        >
+          {copied ? (
+            <>
+              <Check className="h-3.5 w-3.5 text-emerald-600 dark:text-emerald-400" />
+              <span className="text-[11px]">已复制</span>
+            </>
+          ) : (
+            <>
+              <Copy className="h-3.5 w-3.5 opacity-70" />
+              <span className="text-[11px]">复制</span>
+            </>
+          )}
+        </button>
+      </div>
+
+      {/* 代码内容区 */}
+      <pre className="hljs !my-0 !border-0 !bg-transparent p-4 overflow-x-auto font-mono text-[13px] leading-relaxed">
+        {html === null ? (
+          <code>{code}</code>
+        ) : (
+          <code dangerouslySetInnerHTML={{ __html: html }} />
+        )}
+      </pre>
+    </div>
   );
 }
 
