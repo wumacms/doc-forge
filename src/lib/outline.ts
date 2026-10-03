@@ -33,6 +33,7 @@ export function extractOutline(md: string): OutlineItem[] {
   const lines = md.split(/\r?\n/);
   const out: OutlineItem[] = [];
   let fenceChar: string | null = null;
+  let fenceLen = 0;
   /** 上一非空行（trim 后），用于 setext 判定 */
   let prev = "";
   let prevLineNo = 0;
@@ -40,16 +41,26 @@ export function extractOutline(md: string): OutlineItem[] {
   for (let i = 0; i < lines.length; i++) {
     const raw = lines[i];
 
-    // 围栏代码块开关：``` 或 ~~~（同种字符视为闭合）
-    const fm = /^\s{0,3}(`{3,}|~{3,})/.exec(raw);
-    if (fm) {
-      const ch = fm[1][0];
-      if (fenceChar === null) fenceChar = ch;
-      else if (ch === fenceChar) fenceChar = null;
-      prev = "";
-      continue;
-    }
-    if (fenceChar !== null) {
+    if (fenceChar === null) {
+      // 开启围栏代码块：``` 或 ~~~（3个或以上，缩进最多3个空格）
+      const openMatch = /^\s{0,3}(`{3,}|~{3,})/.exec(raw);
+      if (openMatch) {
+        fenceChar = openMatch[1][0];
+        fenceLen = openMatch[1].length;
+        prev = "";
+        continue;
+      }
+    } else {
+      // 闭合围栏代码块：同种符号、长度 >= 开启长度，且反引号后不能有任何非空白字符（不得有语言标识）
+      const closeMatch = /^\s{0,3}(`{3,}|~{3,})\s*$/.exec(raw);
+      if (
+        closeMatch &&
+        closeMatch[1][0] === fenceChar &&
+        closeMatch[1].length >= fenceLen
+      ) {
+        fenceChar = null;
+        fenceLen = 0;
+      }
       prev = "";
       continue;
     }
